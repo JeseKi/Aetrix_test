@@ -7,12 +7,6 @@
     background-position: center;
 }
 
-.topHalf .logo{
-    margin-left: 2vw;
-    margin-top: 2vh;
-    width: 8%;
-    height: auto;
-}
 .topHalf .title{
     color: #00FF00;
     text-shadow:0 0 1em #00FF00;
@@ -69,6 +63,7 @@
 .bottomHalf h1{
     color: white;
     font-size: 10vh;
+    text-shadow: 0 0 1em white;
     font-style: italic;
     font-weight: bolder;
 }

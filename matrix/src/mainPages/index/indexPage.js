@@ -1,5 +1,6 @@
 import React from "react"
-import "./page.css"
+import "./indexPage.css"
+import AetrixNavBar from "../navbar"
 
 export default function MainPage () {
     return(
@@ -11,9 +12,10 @@ export default function MainPage () {
 }
 
 function TopHalf () {
+
     return (
     <div className="topHalf">
-        <a href="/"><img className="logo" alt="主页" src="/imgs/mainPageImgs/LogoWithText.png"/></a>
+        <AetrixNavBar src={"/imgs/mainPageImgs/LogoWithText.png"} textColor={"white"}/>
         <p className="title">ÆTRIX</p>
         <div className="moduleEntrys">
             <a href="/modules/volunteer/introduction">
