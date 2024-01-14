@@ -1,0 +1,73 @@
+.slide{
+    display: flex;
+    width: 13%;
+    height: 95vh;
+    margin: 0;
+    flex-direction: column;
+    border: 1px solid #00000010;
+    border-radius: 10px;
+    background-color: white;
+}
+
+.slide .link{
+    width: 5vw;
+    text-decoration: none;
+    padding: 2%;
+    color: #a1a193;
+    margin-left: 1vw;
+    font-size: 1vh;
+}
+.slide .activeLink{
+    color: #1890ff;
+    background-color: #1890ff10;
+    border-radius: 10px;
+}
+.slide .link:hover{
+    color: #1890ff;
+}
+.slide .iconNav{
+    width: 3vw;
+    height: 3vh;
+}
+.slide .iconNav .icon{
+    width: 3vw;
+    height: 3vh;
+} 
+.nav{
+    background-color: white;
+    display: flex;
+    align-items: center;
+    height: 3vh;
+    margin-bottom: 1vh;
+}
+.title{
+    text-decoration: none;
+    font-size: 2vh;
+    color: black;
+    margin-left: 2vw;
+}
+.modulesbody{
+    background-color: #f3f5f8;
+    height: 100vh;
+}
+.contentContainer{
+    position: absolute; /* 绝对定位 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 50%; /* 顶部对齐到屏幕高度的一半 */
+    left: 50%; /* 左侧对齐到屏幕宽度的一半 */
+    transform: translate(-50%, -50%); /* 使用transform平移，确保元素的中心正好对齐到屏幕中心 */
+    border: 1px solid #00000010;
+    color: red;
+    background-color: white;
+    border-radius: 20px;
+    /* 确定容器的宽度和高度 */
+    width: 30%; /* 或者一个具体的宽度值 */
+    height: 40%; /* 或者一个具体的高度值 */
+}
+.contentContainer .content{
+    width: 80%;
+    height: 80%;
+    font-size: 1vh;
+}
