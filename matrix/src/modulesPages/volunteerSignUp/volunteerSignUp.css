@@ -10,12 +10,12 @@
 }
 
 .slide .link{
-    width: 5vw;
+    width: 10vw;
     text-decoration: none;
     padding: 2%;
     color: #a1a193;
     margin-left: 1vw;
-    font-size: 1vh;
+    font-size: large;
 }
 .slide .activeLink{
     color: #1890ff;
@@ -25,6 +25,29 @@
 .slide .link:hover{
     color: #1890ff;
 }
+/* 移除Accordion边框 */
+.slide .accordion-item {
+    border: none; /* 移除边框 */
+    background-color: transparent; /* 背景透明 */
+    box-shadow: none; /* 移除阴影 */
+    color: #a1a193;
+}
+
+/* 移除Accordion头部的边框 */
+.slide .accordion-header {
+    background-color: transparent; /* 头部背景透明 */
+}
+.slide .accordion-header .accordion-button {
+    color: #a1a193; /* 将字体颜色改为深灰色 */
+    font-size: large;
+}
+/* 当Accordion展开时，移除周围的边框 */
+.slide .accordion-button:not(.collapsed) {
+    border: none; /* 移除边框 */
+    box-shadow: none; /* 移除阴影 */
+    background-color: transparent; /* 背景透明 */
+}
+
 .slide .iconNav{
     width: 3vw;
     height: 3vh;
@@ -69,5 +92,5 @@
 .contentContainer .content{
     width: 80%;
     height: 80%;
-    font-size: 1vh;
+    font-size: larger;
 }

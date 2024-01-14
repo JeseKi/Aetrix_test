@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Link, Route, Routes , NavLink} from 'react-router-dom';
+import { Accordion } from 'react-bootstrap';
 
 import "./volunteerSignUp.css"
 
@@ -44,13 +45,22 @@ function Slide () {
             <nav className='nav'>
                 <p className='title'>志愿者报名</p>
             </nav>
-            <nav className='slide'>
+            <div className='slide'>
                 <Link className='iconNav' to="/">
-                    <img ref={backRootRef} className='icon' src='/imgs/sildeImgs/arrowhead_black.svg' alt='返回'/>
+                        <img ref={backRootRef} className='icon' src='/imgs/sildeImgs/arrowhead_black.svg' alt='返回'/>
                 </Link>
-                <NavLink className={({ isActive }) => isActive ? 'link activeLink' : 'link'} to="/modules/volunteer/introduction"  >志愿者介绍</NavLink>
-                <NavLink className={({ isActive }) => isActive ? 'link activeLink' : 'link'} to="/modules/volunteer/signup">志愿者报名</NavLink>
-            </nav>
+                    <Accordion defaultActiveKey="0" className='link'>
+                        <Accordion.Item eventKey='0'>
+                            <Accordion.Header>
+                                报名志愿者
+                            </Accordion.Header>
+                            <Accordion.Body>
+                                <NavLink className={({ isActive }) => isActive ? 'link activeLink' : 'link'} to='introduction'>自组织志愿者简介</NavLink><p></p>
+                                <NavLink className={({ isActive }) => isActive ? 'link activeLink' : 'link'} to='signup'>自组织志愿者报名</NavLink>
+                            </Accordion.Body>
+                        </Accordion.Item>
+                    </Accordion>
+            </div>
             <div className='contentContainer'>
                 <Routes>
                     <Route path='introduction' element={<Content />} />

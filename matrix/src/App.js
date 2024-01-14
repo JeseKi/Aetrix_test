@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import MainPage from "./mainPage/page"
+import MainPage from "./mainPages/page"
 import Modules from './modulesPages/modules';
 
 // import TestUI from './uiText';
