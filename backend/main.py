@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
 import crud as CRUD
-from models import SessionLocal
+from models import SessionLocal , UserCreate , User
 
 app = FastAPI()
 
@@ -26,8 +26,12 @@ def get_db():
 
 # 创建用户的POST请求端点
 @app.post("/users/crud/create")
-def create_user(username: str, email: str, password: str, db: Session = Depends(get_db)):
-    return CRUD.create_user(db=db, username=username, email=email, password=password)
+def create_user(user: UserCreate, db: Session = Depends(get_db)):
+    existing_user = db.query(User).filter(User.email == user.email).first()
+    if existing_user:
+        raise HTTPException(status_code=400, detail="邮件已存在！")
+    return CRUD.create_user(db=db, user=user)
+
 
 # 获取特定用户的GET请求端点
 @app.get("/users/crud/{user_id}")
@@ -39,8 +43,8 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
 
 # 更新特定用户的PUT请求端点
 @app.put("/users/crud/{user_id}")
-def update_user(user_id: int, username: str, email: str, password: str, db: Session = Depends(get_db)):
-    db_user = CRUD.update_user(db, user_id, username, email, password)
+def update_user(user_id: int, user: UserCreate , db: Session = Depends(get_db)):
+    db_user = CRUD.update_user(db, user_id, user=user)
     if db_user is None:
         raise HTTPException(status_code=404, detail="用户未找到")  # 用户不存在时抛出HTTP异常
     return db_user
