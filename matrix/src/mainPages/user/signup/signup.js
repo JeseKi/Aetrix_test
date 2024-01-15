@@ -1,8 +1,6 @@
 import {React , useState} from "react";
 import { Container, Row, Col, FloatingLabel, Form, Button } from 'react-bootstrap';
-import {NavLink , useNavigate} from "react-router-dom"
-
-import AetrixNavBar from "../../navbar";
+import {NavLink , useNavigate} from "react-router-dom";
 
 import "./signup.css"
  
@@ -19,8 +17,11 @@ export default function SignUp () {
         const userData = {
             username: userName,
             email: email,
-            password: password
-        };
+            password: password,
+            avatar: null,
+            phone: null,
+            bio: null
+        };        
 
         // 发送POST请求到后端
         fetch('http://localhost:8000/users/crud/create', {
@@ -36,7 +37,7 @@ export default function SignUp () {
         .then(data => {
             console.log('Success:', data);
             if (data.id){
-                navigate(`../info/${data.id}`)
+                navigate(`../infor/${data.id}`)
             }
         })
         .catch((error) => {
@@ -46,7 +47,6 @@ export default function SignUp () {
 
     return (
         <div>
-            <AetrixNavBar src={"/imgs/mainPageImgs/LogoWithText_black.svg"} textColor={"black"} />
             <h1 className="signUpTitle">ÆTRIX</h1>
             <Container className="signUpForm">
                 <h2>注册Ætrix</h2>

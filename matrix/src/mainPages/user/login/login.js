@@ -5,14 +5,11 @@ import Button  from "react-bootstrap/Button"
 import Container from "react-bootstrap/Container";
 import {NavLink} from "react-router-dom"
 
-import AetrixNavBar from "../../navbar";
-
 import "./login.css"
 
 export default function Login () {
     return (
         <div>
-            <AetrixNavBar src={"/imgs/mainPageImgs/LogoWithText_black.svg"} textColor={"black"} />
             <h1 className="loginTitle">ÆTRIX</h1>
             <Container className="loginForm">
                 <h2>登录Ætrix</h2>

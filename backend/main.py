@@ -1,11 +1,14 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException , File , UploadFile , Form
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 
-import crud as CRUD
-from models import SessionLocal , UserCreate , User
+import database.crud as CRUD
+from database.models import SessionLocal , UserCreate , User
+from utils.imgSave import save_avatar_file
 
 app = FastAPI()
+app.mount("/users/avatars/", StaticFiles(directory="database/imgs/userAvatars"), name="avatars")
 
 # 添加CORS中间件，以允许跨域资源共享
 app.add_middleware(
@@ -32,7 +35,6 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="邮件已存在！")
     return CRUD.create_user(db=db, user=user)
 
-
 # 获取特定用户的GET请求端点
 @app.get("/users/crud/{user_id}")
 def read_user(user_id: int, db: Session = Depends(get_db)):
@@ -43,7 +45,28 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
 
 # 更新特定用户的PUT请求端点
 @app.put("/users/crud/{user_id}")
-def update_user(user_id: int, user: UserCreate , db: Session = Depends(get_db)):
+def update_user(
+    user_id: int, 
+    username: str = Form(None), 
+    email: str = Form(None), 
+    password: str = Form(None), 
+    phone: str = Form(None), 
+    bio: str = Form(None), 
+    avatar: UploadFile = File(None),
+    db: Session = Depends(get_db)
+    ):
+    
+    user = UserCreate(
+        username=username,
+        email=email,
+        password=password,
+        phone=phone,
+        bio=bio
+    )
+    if avatar:
+        avatar_path = save_avatar_file(avatar, user_id, path="database/imgs/userAvatars" , static_path='/users/avatars/')
+        user.avatar = avatar_path
+    
     db_user = CRUD.update_user(db, user_id, user=user)
     if db_user is None:
         raise HTTPException(status_code=404, detail="用户未找到")  # 用户不存在时抛出HTTP异常

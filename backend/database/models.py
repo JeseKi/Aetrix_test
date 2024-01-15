@@ -1,7 +1,8 @@
-from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy import create_engine, Column, Integer, String , Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from pydantic import BaseModel
+from typing import Optional
 
 # 定义数据库连接URL，这里使用SQLite数据库
 SQLALCHEMY_DATABASE_URL = "sqlite:///./users.db"
@@ -20,11 +21,18 @@ class User(Base):
     username = Column(String, unique=True, index=True)  # 用户名，唯一且可索引
     email = Column(String, unique=True, index=True)  # 电子邮件地址，唯一且可索引
     password = Column(String)  # 密码字段
+    avatar = Column(String)  # 用户头像URL
+    phone = Column(String, unique=True, index=True)  # 电话号码，唯一且可索引
+    bio = Column(Text)  # 用户简介
 
+# 创建所有模型的数据库表
+Base.metadata.create_all(bind=engine)
+
+# 创建可接收的请求类型
 class UserCreate(BaseModel):
     username: str
     email: str
     password: str
-
-# 创建所有模型的数据库表
-Base.metadata.create_all(bind=engine)
+    avatar: Optional[str] = None
+    phone: str | None
+    bio: str | None
