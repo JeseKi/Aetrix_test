@@ -12,8 +12,9 @@ export default function AetrixNavBar ({src , textColor}) {
                     <img className="logo" alt="主页" src={src}/>
                 </Nav.Link>
                 <Container className="text" style={{color:textColor}}>
-                    <Nav.Link href="about">关于ÆTRIX</Nav.Link>
-                    <Nav.Link href="cooperation">联系我们</Nav.Link>
+                    <Nav.Link href="/about">关于ÆTRIX</Nav.Link>
+                    <Nav.Link href="/cooperation">联系我们</Nav.Link>
+                    <Nav.Link href="/user/login">登录</Nav.Link>
                 </Container>
         </Navbar>
     )
