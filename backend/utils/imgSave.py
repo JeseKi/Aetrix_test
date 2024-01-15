@@ -2,9 +2,9 @@ import os
 from fastapi import UploadFile
 from uuid import uuid4
 
-def save_avatar_file(avatar: UploadFile, user_id: int, path: str, static_path: str) -> str:
+def save_avatar_file(avatar: UploadFile, user_id: int, path: str, static_path: str) -> list:
     """
-    保存用户头像文件到服务器指定路径，并返回头像的静态文件路径。
+    保存用户头像文件到服务器指定路径，并返回头像的静态文件路径和文件路径。
 
     Args:
         avatar (UploadFile): 上传的头像文件对象。
@@ -13,7 +13,7 @@ def save_avatar_file(avatar: UploadFile, user_id: int, path: str, static_path: s
         static_path (str): 头像的静态文件路径前缀。
 
     Returns:
-        str: 头像的静态文件路径。
+        list: 头像的静态文件路径和文件路径。
     """
     # 获取文件扩展名
     file_extension = os.path.splitext(avatar.filename)[1]
@@ -28,5 +28,5 @@ def save_avatar_file(avatar: UploadFile, user_id: int, path: str, static_path: s
     with open(file_path, "wb") as file:
         file.write(avatar.file.read())
 
-    # 返回头像的静态文件路径
-    return static_path + file_name
+    # 返回头像两个路径
+    return [static_path + file_name , file_path]

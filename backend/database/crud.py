@@ -31,6 +31,7 @@ def update_user(db: Session, user_id: int, user: UserCreate):
             db_user.password = user.password  # 同样，密码应该安全处理
         if user.avatar != None and user.avatar != "":
             db_user.avatar = user.avatar
+            db_user.avatar_path = user.avatar_path
         db_user.phone = user.phone
         db_user.bio = user.bio
 

@@ -22,6 +22,7 @@ class User(Base):
     email = Column(String, unique=True, index=True)  # 电子邮件地址，唯一且可索引
     password = Column(String)  # 密码字段
     avatar = Column(String)  # 用户头像URL
+    avatar_path = Column(String) # 用户头像文件路径
     phone = Column(String, unique=True, index=True)  # 电话号码，唯一且可索引
     bio = Column(Text)  # 用户简介
 
@@ -32,7 +33,8 @@ Base.metadata.create_all(bind=engine)
 class UserCreate(BaseModel):
     username: str
     email: str
-    password: str
+    password: Optional[str] = None
     avatar: Optional[str] = None
-    phone: str | None
-    bio: str | None
+    avatar_path: Optional[str] = None
+    phone: Optional[str] = None
+    bio: Optional[str] = None

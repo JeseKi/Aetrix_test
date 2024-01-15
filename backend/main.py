@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends, HTTPException , File , UploadFile , Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
+import os
 
 import database.crud as CRUD
 from database.models import SessionLocal , UserCreate , User
@@ -65,7 +66,14 @@ def update_user(
     )
     if avatar:
         avatar_path = save_avatar_file(avatar, user_id, path="database/imgs/userAvatars" , static_path='/users/avatars/')
-        user.avatar = avatar_path
+        query_result = db.query(User).filter(User.id == user_id).first()
+        if query_result and os.path.isfile(query_result.avatar_path):
+            # 删除文件
+            os.remove(query_result.avatar_path)
+        else:
+            print("文件不存在")
+
+        user.avatar , user.avatar_path= avatar_path[0] , avatar_path[1]
     
     db_user = CRUD.update_user(db, user_id, user=user)
     if db_user is None:
