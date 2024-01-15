@@ -16,8 +16,15 @@ export default function SignUp () {
                 <p>已有账号?<NavLink to="../login" className="NavLink" >立刻登录!</NavLink></p>
                 <Form className="signUpInput">
                     <FloatingLabel
+                        controlId="UserName"
+                        label="用户名"
+                    >
+                        <Form.Control type="text" placeholder="" />
+                    </FloatingLabel>
+                    <FloatingLabel
                         controlId="Email"
                         label="邮箱地址"
+                        className="signUpInput"
                     >
                         <Form.Control type="email" placeholder="name@example.com" />
                     </FloatingLabel>
