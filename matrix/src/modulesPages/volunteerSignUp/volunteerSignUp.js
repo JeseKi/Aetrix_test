@@ -11,7 +11,7 @@ export default function VolunteerSignUp() {
     </div>
   );
 }
-
+// 实时改变侧边栏的回退箭头
 function Slide () {
     // 创建一个ref来引用图像
     const backRootRef = useRef();
@@ -63,18 +63,18 @@ function Slide () {
             </div>
             <div className='contentContainer'>
                 <Routes>
-                    <Route path='introduction' element={<Content />} />
-                    <Route path='signup' element={<Content />} />
+                    <Route path='introduction' element={<Content2 />} />
+                    <Route path='signup' element={<Content2 />} />
                 </Routes>
              </div>
         </div>
     )
 }
 
-function Content () {
+function Content2 () {
     return (
         <div className='content'>
-            Hello World
+            <NavLink className={({ isActive }) => isActive ? 'link activeLink' : 'link'} to='/tables/volunteersignup'>报名</NavLink><p></p>
         </div>
     )
 }

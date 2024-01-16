@@ -1,13 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import Form from "react-bootstrap/Form"
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Button  from "react-bootstrap/Button"
 import Container from "react-bootstrap/Container";
-import {NavLink} from "react-router-dom"
+import {NavLink, useNavigate} from "react-router-dom"
 
 import "./login.css"
 
 export default function Login () {
+    const [email , setEmail] = useState('');
+    const [password , setPassword] = useState('');
+
+    const navigate = useNavigate()
+
+    const userData = {
+        email: email,
+        password: password
+    }
+    function userLogin () {
+        fetch('http://localhost:8000/users/login/email',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        })
+        .then(response => {
+            return response.json()
+        })
+        .then(data =>{
+            if (data.id) {
+                navigate(`../infor/${data.id}`)
+            }
+        })
+    };
     return (
         <div>
             <h1 className="loginTitle">ÆTRIX</h1>
@@ -19,12 +45,12 @@ export default function Login () {
                         controlId="Email"
                         label="邮箱地址"
                     >
-                        <Form.Control type="email" placeholder="name@example.com" />
+                        <Form.Control type="email" placeholder="name@example.com" onChange={e => setEmail(e.target.value)}/>
                     </FloatingLabel>
                     <FloatingLabel className="loginInput" controlId="Password" label="密码">
-                        <Form.Control type="password" placeholder="Password" />
+                        <Form.Control type="password" placeholder="Password" onChange={e => setPassword(e.target.value)}/>
                     </FloatingLabel>
-                    <Button className="loginSubmit" variant="primary" type="submit">
+                    <Button className="loginSubmit" variant="primary" type="button" onClick={userLogin}>
                         登录
                     </Button>
                 </Form>

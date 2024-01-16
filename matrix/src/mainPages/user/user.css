@@ -7,6 +7,7 @@
     align-items: center;
     justify-content: center;
     box-shadow: 3px 3px 10px #AAAAAA;
+    border-radius: 10px;
 }
 .avatar{
     width: 5vw;
@@ -27,4 +28,5 @@
 .name{
     text-align: center;
     border: none;
+    width: auto;
 }

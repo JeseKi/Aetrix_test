@@ -1,0 +1,32 @@
+.tableContainer{
+    display: flex;
+    flex-direction: column;
+    box-shadow: 3px 3px 10px #AAAAAA;
+    border-radius: 10px;
+    max-width: 61.8vw;
+    margin-top: 3vh;
+    padding: 2vh;
+}
+div h1{
+    text-align: center;
+}
+.formTextarea{
+    margin-left: 1vh;
+    margin-right: 1vh;
+}
+
+Form{
+    font-size: larger;
+}
+
+.littleContainer{
+    box-shadow: 3px 3px 10px #AAAAAA;
+    border-radius: 10px;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+    padding: 1vw;
+}
+
+hr{
+    border-width: 3px;
+}

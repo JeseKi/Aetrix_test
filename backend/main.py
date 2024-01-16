@@ -1,11 +1,11 @@
-from fastapi import FastAPI, Depends, HTTPException , File , UploadFile , Form
+from fastapi import FastAPI, Depends, HTTPException , File , UploadFile , Form , status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 import os
 
 import database.crud as CRUD
-from database.models import SessionLocal , UserCreate , User
+from database.models import SessionLocal , UserCreate, UserLogin , User 
 from utils.imgSave import save_avatar_file
 
 app = FastAPI()
@@ -85,3 +85,21 @@ def update_user(
 def delete_user(user_id: int, db: Session = Depends(get_db)):
     CRUD.delete_user(db, user_id)
     return {"detail": "用户已删除"}  # 返回用户已删除的消息
+
+@app.post("/users/login/email")
+def login_user(infor: UserLogin, db: Session = Depends(get_db)):
+    # 根据邮箱从数据库中获取用户
+    user = db.query(User).filter(User.email == infor.email).first()
+
+    # 检查用户是否存在
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="用户不存在")
+
+    # 验证密码
+    if user.password == infor.password:
+        return {
+            "id" : user.id,
+            "detail" : "登录成功",
+        }
+    else:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="邮箱或密码错误")

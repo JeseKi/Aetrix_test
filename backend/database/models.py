@@ -38,3 +38,7 @@ class UserCreate(BaseModel):
     avatar_path: Optional[str] = None
     phone: Optional[str] = None
     bio: Optional[str] = None
+    
+class UserLogin(BaseModel):
+    email: str
+    password: str
