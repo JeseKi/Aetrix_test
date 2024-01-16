@@ -13,8 +13,8 @@ export default function VolunteerSignUpTable () {
     const [totalEmployees, setTotalEmployees] = useState(0); // 从业人员 - 企业全体
     const [maleEmployees, setMaleEmployees] = useState(0); // 从业人员 - 男
     const [femaleEmployees, setFemaleEmployees] = useState(0); // 从业人员 - 女
-    const [businessContent, setBusinessContent] = useState(''); // 事业内容 (可占两行)
-    const [specialty, setSpecialty] = useState(''); // 经营特长 (可占两行)
+    const [businessContent, setBusinessContent] = useState(''); // 事业内容
+    const [specialty, setSpecialty] = useState(''); // 经营特长
     const [companyProvince, setCompanyProvince] = useState(''); // 公司地址 - 省份
     const [companyCity, setCompanyCity] = useState(''); // 公司地址 - 市
     const [companyDetailedAddress, setCompanyDetailedAddress] = useState(''); // 公司地址 - 详细地址
@@ -26,7 +26,6 @@ export default function VolunteerSignUpTable () {
     const [birthdate, setBirthdate] = useState(''); // 生日年月
     const [phone, setPhone] = useState(''); // 电话
     const [personalPhoto, setPersonalPhoto] = useState(''); // 个人照片
-    const [personalLocation, setPersonalLocation] = useState(''); // 个人地址
     const [personalProvince, setPersonalProvince] = useState(''); // 个人地址 - 省份
     const [personalCity, setPersonalCity] = useState(''); // 个人地址 - 市
     const [personalDetailedAddress, setPersonalDetailedAddress] = useState(''); // 个人地址 - 详细地址
@@ -42,49 +41,94 @@ export default function VolunteerSignUpTable () {
     const [onlineOffline, setOnlineOffline] = useState(false); // 是否是线上?
     const [fullTimePartTime, setFullTimePartTime] = useState(false); // 全职/兼职
     const [probationaryCompensation, setProbationaryCompensation] = useState(false); // 试用期间报酬 (有/无)
-
+    // 表单字典
+    const fieldsToCheck = [
+        { value: companyName, name: "公司名称" },
+        { value: legalRepresentative, name: "法定代表人姓名" },
+        { value: establishmentDate, name: "设立日期" },
+        { value: capital, name: "资本金" },
+        { value: totalEmployees, name: "企业全体人数" },
+        { value: maleEmployees, name: "男性人数" },
+        { value: femaleEmployees, name: "女性人数" },
+        { value: businessContent, name: "事业内容" },
+        { value: specialty, name: "经营特长" },
+        { value: companyProvince, name: "公司地址 - 省份" },
+        { value: companyCity, name: "公司地址 - 市" },
+        { value: companyDetailedAddress, name: "公司地址 - 详细地址" },
+        { value: companyZipcode, name: "公司地址 - 邮编" },
+        { value: fullName, name: "姓名" },
+        { value: gender, name: "性别" },
+        { value: birthdate, name: "生日年月" },
+        { value: phone, name: "电话" },
+        { value: personalPhoto, name: "个人照片" },
+        { value: personalProvince, name: "个人地址 - 省份" },
+        { value: personalCity, name: "个人地址 - 市" },
+        { value: personalDetailedAddress, name: "个人地址 - 详细地址" },
+        { value: personalZipcode, name: "个人地址 - 邮编" },
+        { value: recruiters, name: "招募人员" },
+        { value: requiredCount, name: "需求人数" },
+        { value: taskType, name: "任务形态" },
+        { value: educationRequirement, name: "学历要求" },
+        { value: personalIntroduction, name: "个人内容介绍 (PR)" },
+        { value: skills, name: "领域必要相关技能" },
+      ];
+      
+    // 处理表单提交
     const handleFormSubmit = () => {
-        // 打印所有信息
-        console.log("公司情报:");
-        console.log("公司名称:", companyName);
-        console.log("法定代表人姓名:", legalRepresentative);
-        console.log("设立日期:", establishmentDate);
-        console.log("资本金:", capital);
-        console.log("从业人员 - 企业全体:", totalEmployees);
-        console.log("从业人员 - 男:", maleEmployees);
-        console.log("从业人员 - 女:", femaleEmployees);
-        console.log("事业内容:", businessContent);
-        console.log("经营特长:", specialty);
-        console.log("公司地址 - 省份:", companyProvince);
-        console.log("公司地址 - 市:", companyCity);
-        console.log("公司地址 - 详细地址:", companyDetailedAddress);
-        console.log("公司地址 - 是否为国外？", isCompanyAbroad);
-        console.log("公司地址 - 邮编:", companyZipcode);
-    
-        console.log("个人情报:");
-        console.log("姓名:", fullName);
-        console.log("性别:", gender);
-        console.log("生日年月:", birthdate);
-        console.log("电话:", phone);
-        console.log("个人照片:", personalPhoto);
-        console.log("个人地址:", personalLocation);
-        console.log("个人地址 - 省份:", personalProvince);
-        console.log("个人地址 - 市:", personalCity);
-        console.log("个人地址 - 详细地址:", personalDetailedAddress);
-        console.log("个人地址 - 是否为国外？", isPersonalAbroad);
-        console.log("个人地址 - 邮编:", personalZipcode);
-    
-        console.log("执行方案:");
-        console.log("招募人员:", recruiters);
-        console.log("需求人数:", requiredCount);
-        console.log("任务形态:", taskType);
-        console.log("学历要求:", educationRequirement);
-        console.log("个人内容介绍 (PR):", personalIntroduction);
-        console.log("领域必要相关技能:", skills);
-        console.log("是否是线上?", onlineOffline);
-        console.log("全职/兼职:", fullTimePartTime);
-        console.log("试用期间报酬 (有/无):", probationaryCompensation);
-      };
+        let hasEmptyFields = false;
+        // 调试
+        // console.log("正在提交\n")
+        // console.log("公司情报:");
+        // console.log("公司名称:", companyName);
+        // console.log("法定代表人姓名:", legalRepresentative);
+        // console.log("设立日期:", establishmentDate);
+        // console.log("资本金:", capital);
+        // console.log("从业人员 - 企业全体:", totalEmployees);
+        // console.log("从业人员 - 男:", maleEmployees);
+        // console.log("从业人员 - 女:", femaleEmployees);
+        // console.log("事业内容:", businessContent);
+        // console.log("经营特长:", specialty);
+        // console.log("公司地址 - 省份:", companyProvince);
+        // console.log("公司地址 - 市:", companyCity);
+        // console.log("公司地址 - 详细地址:", companyDetailedAddress);
+        // console.log("公司地址 - 是否为国外？", isCompanyAbroad);
+        // console.log("公司地址 - 邮编:", companyZipcode);
+        // 
+        // console.log("个人情报:");
+        // console.log("姓名:", fullName);
+        // console.log("性别:", gender);
+        // console.log("生日年月:", birthdate);
+        // console.log("电话:", phone);
+        // console.log("个人照片:", personalPhoto);
+        // console.log("个人地址 - 省份:", personalProvince);
+        // console.log("个人地址 - 市:", personalCity);
+        // console.log("个人地址 - 详细地址:", personalDetailedAddress);
+        // console.log("个人地址 - 是否为国外？", isPersonalAbroad);
+        // console.log("个人地址 - 邮编:", personalZipcode);
+        // 
+        // console.log("执行方案:");
+        // console.log("招募人员:", recruiters);
+        // console.log("需求人数:", requiredCount);
+        // console.log("任务形态:", taskType);
+        // console.log("学历要求:", educationRequirement);
+        // console.log("个人内容介绍 (PR):", personalIntroduction);
+        // console.log("领域必要相关技能:", skills);
+        // console.log("是否是线上?", onlineOffline);
+        // console.log("全职/兼职:", fullTimePartTime);
+        // console.log("试用期间报酬 (有/无):", probationaryCompensation);
+        for (const field of fieldsToCheck) {
+            if (!field.value) {
+                alert(`${field.name}不能为空`);
+                hasEmptyFields = true;
+                break; // 遇到第一个空字段后终止循环
+            }
+        };
+        
+        if (!hasEmptyFields) {
+            console.log("提交表单");
+            // 这里可以执行实际的表单提交操作
+        };        
+    };
 
     return (
         <div className="div">
@@ -115,7 +159,6 @@ export default function VolunteerSignUpTable () {
                   setBirthdate={setBirthdate}
                   setPhone={setPhone}
                   setPersonalPhoto={setPersonalPhoto}
-                  setPersonalLocation={setPersonalLocation}
                   setPersonalProvince={setPersonalProvince}
                   setPersonalCity={setPersonalCity}
                   setPersonalDetailedAddress={setPersonalDetailedAddress}
