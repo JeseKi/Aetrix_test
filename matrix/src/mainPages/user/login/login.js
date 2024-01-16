@@ -34,6 +34,7 @@ export default function Login () {
             }
         })
     };
+    
     return (
         <div>
             <h1 className="loginTitle">ÆTRIX</h1>

@@ -1,5 +1,5 @@
 import {React , useState} from "react";
-import { Container, Row, Col, FloatingLabel, Form, Button } from 'react-bootstrap';
+import { Container, Row, Col, FloatingLabel, Form, Button, InputGroup } from 'react-bootstrap';
 import {NavLink , useNavigate} from "react-router-dom";
 
 import "./signup.css"
@@ -58,45 +58,47 @@ export default function SignUp () {
                     </FloatingLabel>
 
                     {/* 输入邮箱地址 */}
-                    <FloatingLabel controlId="Email" label="邮箱地址" className="signUpInput">
+                    <FloatingLabel controlId="Email" label="邮箱地址">
                         <Form.Control 
                             type="email" 
                             placeholder="name@example.com" 
                             value={email} 
+                            style={{marginTop:"2vh"}}
                             onChange={(e) => setEmail(e.target.value)}/>
                     </FloatingLabel>
                     
                     {/* 输入密码 */}
-                    <FloatingLabel className="signUpInput" controlId="Password" label="密码">
+                    <FloatingLabel controlId="Password" label="密码">
                         <Form.Control 
                         type="password" 
                         placeholder="Password" 
                         value={password} 
+                        style={{marginTop:"2vh"}}
                         onChange={(e) => setPassword(e.target.value)}/>
                     </FloatingLabel>
-                    <FloatingLabel className="signUpInput" controlId="Password" label="确认密码">
+                    <FloatingLabel controlId="Password" label="确认密码">
                         <Form.Control 
                             type="password" 
                             placeholder="Password" 
                             value={confirmPassword} 
+                            style={{marginTop:"2vh" , marginBottom:"2vh"}}
                             onChange={(e) => setConfirmPassWord(e.target.value)}/>
                     </FloatingLabel>
 
                     {/* 输入验证码 */}
-                    <Container className="signUpInput">
-                        <Row className="align-items-center">
-                            <Col>
-                            <FloatingLabel controlId="GetVerificationCode" label="验证码">
-                                <Form.Control type="text" placeholder="验证码" />
-                            </FloatingLabel>
-                            </Col>
-                            <Col xs="auto">
-                            <Button type="button">
+                    <InputGroup>
+                        <FloatingLabel controlId="GetVerificationCode" label="验证码">
+                            <Form.Control 
+                            type="text" 
+                            placeholder="验证码" 
+                            />
+                        </FloatingLabel>
+                        <InputGroup.Text className="verificationCode">
+                            <Button style={{background:"none" , border:"none"}}>
                                 获取验证码
                             </Button>
-                            </Col>
-                        </Row>
-                    </Container>
+                        </InputGroup.Text>
+                    </InputGroup>
                     
                     {/* 提交注册信息 */}
                     <Button className="signUpSubmit" variant="primary" type="button" onClick={clickSignUp}>

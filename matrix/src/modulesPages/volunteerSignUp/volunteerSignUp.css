@@ -20,7 +20,7 @@
 .slide .activeLink{
     color: #1890ff;
     background-color: #1890ff10;
-    border-radius: 10px;
+    border-radius: 6.2%;
 }
 .slide .link:hover{
     color: #1890ff;

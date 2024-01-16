@@ -9,27 +9,28 @@
 .signUpForm{
     width: 23vw;
     height: 46vh;
+    border-radius:6.2%;
     box-shadow: 3px 3px 10px #AAAAAA;
+    text-align: center;
+    padding-top: 2vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
 }
 
 .signUpInput{
     margin-top: 2vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-.verificationInputGroup {
-    width: 100%; /* 保证Row占满Container的宽度 */
-  }
-.signUpSubmit{
+    max-width: 15vw;
     margin-top: 2vh;
 }
 
+.signUpSubmit{
+    margin-top: 2vh;
+}
+.verificationCode{
+    color: white;
+    background-color: #3c9efd;
+}
 .NavLink{
     text-decoration: none;
 }
