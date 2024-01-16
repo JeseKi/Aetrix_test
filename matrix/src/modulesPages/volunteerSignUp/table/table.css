@@ -7,8 +7,11 @@
     margin-top: 3vh;
     padding: 2vh;
 }
-div h1{
-    text-align: center;
+.div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 .formTextarea{
     margin-left: 1vh;
@@ -25,6 +28,11 @@ Form{
     margin-top: 1vh;
     margin-bottom: 1vh;
     padding: 1vw;
+}
+
+.submitButton{
+    margin-top: 3vh;
+    font-size: 1.5em;
 }
 
 hr{

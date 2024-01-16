@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends, HTTPException , File , UploadFile , Form , status
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
@@ -10,6 +11,8 @@ from utils.imgSave import save_avatar_file
 
 app = FastAPI()
 app.mount("/users/avatars/", StaticFiles(directory="database/imgs/userAvatars"), name="avatars")
+app.mount("/imgs", StaticFiles(directory="build/imgs"), name="imgs")
+app.mount("/static",StaticFiles(directory="build/static"), name="static")
 
 # 添加CORS中间件，以允许跨域资源共享
 app.add_middleware(
@@ -30,15 +33,21 @@ def get_db():
 
 # 创建用户的POST请求端点
 @app.post("/users/crud/create")
-def create_user(user: UserCreate, db: Session = Depends(get_db)):
+async def create_user(user: UserCreate, db: Session = Depends(get_db)):
     existing_user = db.query(User).filter(User.email == user.email).first()
     if existing_user:
+        print("邮件已存在！")
         raise HTTPException(status_code=400, detail="邮件已存在！")
+    existing_username = db.query(User).filter(User.username == user.username).first()
+    
+    if existing_username:
+        print("用户名已被占用！")
+        raise HTTPException(status_code=400, detail="用户名已被占用！")
     return CRUD.create_user(db=db, user=user)
 
 # 获取特定用户的GET请求端点
 @app.get("/users/crud/{user_id}")
-def read_user(user_id: int, db: Session = Depends(get_db)):
+async def read_user(user_id: int, db: Session = Depends(get_db)):
     db_user = CRUD.get_user(db, user_id)
     if db_user is None:
         raise HTTPException(status_code=404, detail="用户未找到")  # 用户不存在时抛出HTTP异常
@@ -46,7 +55,7 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
 
 # 更新特定用户的PUT请求端点
 @app.put("/users/crud/{user_id}")
-def update_user(
+async def update_user(
     user_id: int, 
     username: str = Form(None), 
     email: str = Form(None), 
@@ -82,12 +91,12 @@ def update_user(
 
 # 删除特定用户的DELETE请求端点
 @app.delete("/users/crud/{user_id}")
-def delete_user(user_id: int, db: Session = Depends(get_db)):
+async def delete_user(user_id: int, db: Session = Depends(get_db)):
     CRUD.delete_user(db, user_id)
     return {"detail": "用户已删除"}  # 返回用户已删除的消息
 
 @app.post("/users/login/email")
-def login_user(infor: UserLogin, db: Session = Depends(get_db)):
+async def login_user(infor: UserLogin, db: Session = Depends(get_db)):
     # 根据邮箱从数据库中获取用户
     user = db.query(User).filter(User.email == infor.email).first()
 
@@ -103,3 +112,12 @@ def login_user(infor: UserLogin, db: Session = Depends(get_db)):
         }
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="邮箱或密码错误")
+
+@app.get("/robot{path}")
+async def robot(path: str):
+    return FileResponse("build/aboutHTML/robots.txt")
+
+@app.get("/{catch_all:path}")
+async def catch_all(catch_all: str):
+    print("已捕获")
+    return FileResponse("build/index.html")
