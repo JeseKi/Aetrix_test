@@ -183,9 +183,6 @@ export default function VolunteerSignUpTable () {
 
         // 添加选择自组织种类
         formData.append('CategorySelect', CategorySelect);
-
-        // 现在 formData 包含了所有信息，可以用于发送到后端
-
     
         // 添加图片文件
         if (personalPhoto) {
@@ -200,9 +197,11 @@ export default function VolunteerSignUpTable () {
     
             if (response.ok) {
                 console.log("Form submitted successfully");
+                alert("提交成功")
                 // 处理响应
             } else {
                 console.error("Form submission failed");
+                alert("提交失败")
                 // 处理错误
             }
         } catch (error) {

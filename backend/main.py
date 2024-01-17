@@ -4,9 +4,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 import os
+from typing import List
 
 ###### 数据库包 ######
+#CRUD操作
 import aetrix_database.user_crud as user_crud
+import aetrix_database.tables.tables_crud.volunteerSignUp as volunteer_crud
+# 数据库模型
 from aetrix_database.models import SessionLocal , User  , VolunteersInitiateModel
 
 ###### 请求体包 ######
@@ -168,6 +172,9 @@ async def tables_volunteersignup_initiate_submit(
 
     # 选择自组织种类
     CategorySelect: str = Form(...),  # 是否选择自组织种类
+    
+    # 数据库
+    db = Depends(get_db)
 ):
     table = VolunteersInitiate(
         companyName=companyName,
@@ -211,8 +218,32 @@ async def tables_volunteersignup_initiate_submit(
     table.personalPhoto , table.personalPhotoPath= static_path , file_path
     for i in table:
         print(i)
+    try:
+        db_user = user_crud.get_user(db, table.user_id)
+        volunteer_crud.create_volunteers_initiate(db, table, user=db_user)
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=400, detail="表单提交失败")
     return {"message": "表格已成功提交"}
 
+@app.get("/tables/volunteersignup/initiate/user/{user_id}")
+def read_volunteer_initiates_by_user(user_id: int, db: Session = Depends(get_db)):
+    return volunteer_crud.get_volunteer_initiates_by_user_id(db, user_id)
+
+@app.get("/table/volunteersignup/initiate/{initiate_id}")
+def read_volunteer_initiate(initiate_id: int, db: Session = Depends(get_db)):
+    volunteer_initiate = volunteer_crud.get_volunteer_initiate_by_id(db, initiate_id)
+    if volunteer_initiate is None:
+        raise HTTPException(status_code=404, detail="表单未找到")
+    return volunteer_initiate
+
+@app.delete("/table/volunteersignup/initiate/{initiate_id}")
+def delete_volunteers_initiate(initiate_id: int, db: Session = Depends(get_db)):
+    try:
+        volunteer_crud.delete_volunteers_initiate(db, initiate_id)
+        return {"message": "表单已删除"}
+    except:
+        return {"message": "表单删除失败"}
 
 # 返回爬虫协议
 @app.get("/robot{path}")

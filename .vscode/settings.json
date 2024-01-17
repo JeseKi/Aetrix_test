@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "./backend/aetrix_database/models"
+    ]
+}

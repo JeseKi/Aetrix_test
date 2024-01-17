@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import Optional
 
 class VolunteersInitiate(BaseModel):
-    userid: Optional[int] = None
+    user_id: Optional[int] = 1
     # 公司情报
     companyName: str = ''
     legalRepresentative: str = ''
