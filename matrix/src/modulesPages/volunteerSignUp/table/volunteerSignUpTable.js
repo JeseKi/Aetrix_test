@@ -134,10 +134,82 @@ export default function VolunteerSignUpTable () {
         
         if (!hasEmptyFields) {
             console.log("提交表单");
-            
+            submitVolunteerForm()
         };        
     };
+    // 提交表单逻辑
+    async function submitVolunteerForm() {
+        // 创建一个空的 FormData 对象
+        const formData = new FormData();
 
+        // 添加公司情报
+        formData.append('companyName', companyName);
+        formData.append('legalRepresentative', legalRepresentative);
+        formData.append('establishmentDate', establishmentDate);
+        formData.append('capital', capital);
+        formData.append('totalEmployees', totalEmployees.toString());
+        formData.append('maleEmployees', maleEmployees.toString());
+        formData.append('femaleEmployees', femaleEmployees.toString());
+        formData.append('businessContent', businessContent);
+        formData.append('specialty', specialty);
+        formData.append('companyProvince', companyProvince);
+        formData.append('companyCity', companyCity);
+        formData.append('companyDetailedAddress', companyDetailedAddress);
+        formData.append('isCompanyAbroad', isCompanyAbroad.toString());
+        formData.append('companyZipcode', companyZipcode);
+
+        // 添加个人情报
+        formData.append('fullName', fullName);
+        formData.append('gender', gender);
+        formData.append('birthdate', birthdate);
+        formData.append('phone', phone);
+        formData.append('personalPhoto', personalPhoto);
+        formData.append('personalProvince', personalProvince);
+        formData.append('personalCity', personalCity);
+        formData.append('personalDetailedAddress', personalDetailedAddress);
+        formData.append('isPersonalAbroad', isPersonalAbroad.toString());
+        formData.append('personalZipcode', personalZipcode);
+
+        // 添加执行方案
+        formData.append('recruiters', recruiters);
+        formData.append('requiredCount', requiredCount.toString());
+        formData.append('taskType', taskType);
+        formData.append('educationRequirement', educationRequirement);
+        formData.append('personalIntroduction', personalIntroduction);
+        formData.append('skills', skills);
+        formData.append('onlineOffline', onlineOffline.toString());
+        formData.append('fullTimePartTime', fullTimePartTime.toString());
+        formData.append('probationaryCompensation', probationaryCompensation.toString());
+
+        // 添加选择自组织种类
+        formData.append('CategorySelect', CategorySelect);
+
+        // 现在 formData 包含了所有信息，可以用于发送到后端
+
+    
+        // 添加图片文件
+        if (personalPhoto) {
+            formData.append('img', personalPhoto);
+        }
+    
+        try {
+            const response = await fetch('http://127.0.0.1:8000/tables/volunteersignup/initiate/submit', {
+                method: 'PUT',
+                body: formData,
+            });
+    
+            if (response.ok) {
+                console.log("Form submitted successfully");
+                // 处理响应
+            } else {
+                console.error("Form submission failed");
+                // 处理错误
+            }
+        } catch (error) {
+            console.error("Error submitting form", error);
+        }
+    }
+    
     return (
         <div className="div">
             <h1>报名自组织发起人</h1>

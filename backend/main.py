@@ -122,11 +122,52 @@ async def login_user(infor: UserLogin, db: Session = Depends(get_db)):
 # 提交志愿者发起人表格
 @app.put("/tables/volunteersignup/initiate/submit")
 async def tables_volunteersignup_initiate_submit(
-    table: VolunteersInitiate,
-    File: UploadFile = File(None),
-    db: Session = Depends(get_db)
+    # 公司情报
+    companyName: str = Form(...),  # 公司名称
+    legalRepresentative: str = Form(...),  # 法定代表人姓名
+    establishmentDate: str = Form(...),  # 设立日期
+    capital: str = Form(...),  # 资本金
+    totalEmployees: int = Form(...),  # 从业人员 - 企业全体
+    maleEmployees: int = Form(...),  # 从业人员 - 男
+    femaleEmployees: int = Form(...),  # 从业人员 - 女
+    businessContent: str = Form(...),  # 事业内容
+    specialty: str = Form(...),  # 经营特长
+    companyProvince: str = Form(...),  # 公司地址 - 省份
+    companyCity: str = Form(...),  # 公司地址 - 市
+    companyDetailedAddress: str = Form(...),  # 公司地址 - 详细地址
+    isCompanyAbroad: bool = Form(...),  # 公司地址 - 是否为国外？
+    companyZipcode: str = Form(...),  # 公司地址 - 邮
+
+    # 个人情报
+    fullName: str = Form(...),  # 姓名
+    gender: str = Form(...),  # 性别
+    birthdate: str = Form(...),  # 生日年月
+    phone: str = Form(...),  # 电话
+    personalPhoto: UploadFile = File(None),  # 个人照片
+    personalProvince: str = Form(...),  # 个人地址 - 省份
+    personalCity: str = Form(...),  # 个人地址 - 市
+    personalDetailedAddress: str = Form(...),  # 个人地址 - 详细地址
+    isPersonalAbroad: bool = Form(...),  # 个人地址 - 是否为国外？
+    personalZipcode: str = Form(...),  # 个人地址 - 邮编
+
+    # 执行方案
+    recruiters: str = Form(...),  # 招募人员
+    requiredCount: int = Form(...),  # 需求人数
+    taskType: str = Form(...),  # 任务形态
+    educationRequirement: str = Form(...),  # 学历要求
+    personalIntroduction: str = Form(...),  # 个人内容介绍 (PR)
+    skills: str = Form(...),  # 领域必要相关技能
+    onlineOffline: bool = Form(...),  # 是否是线上?
+    fullTimePartTime: bool = Form(...),  # 全职/兼职
+    probationaryCompensation: bool = Form(...),  # 试用期间报酬 (有/无)
+
+    # 选择自组织种类
+    CategorySelect: str = Form(...),  # 是否选择自组织种类
 ):
-    pass
+    # 这里可以使用上述参数来处理数据
+    # 例如，可以保存表单数据到数据库或执行其他逻辑
+    return {"message": "表格已成功提交"}
+
 
 # 返回爬虫协议
 @app.get("/robot{path}")
