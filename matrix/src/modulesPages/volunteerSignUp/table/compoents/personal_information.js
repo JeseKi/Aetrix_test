@@ -70,7 +70,7 @@ export default function PersonalInformation(props) {
           <Col>
             <Form.Group>
               <Form.Label>上传你的个人图片</Form.Label>
-              <UplaodImg setImg={setPersonalPhoto} size_limit={"5mb"}/>
+              <UplaodImg setImg={setPersonalPhoto} size_limit={"5"}/>
             </Form.Group>
           </Col>
         </Row>

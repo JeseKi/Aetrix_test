@@ -7,6 +7,7 @@ import os
 
 import database.crud as CRUD
 from database.models import SessionLocal , UserCreate, UserLogin , User 
+from database.table_models.volunteer_sign_up import VolunteersInitiate
 from utils.imgSave import save_avatar_file
 
 app = FastAPI()
@@ -31,7 +32,7 @@ def get_db():
     finally:
         db.close()
 
-# 创建用户的POST请求端点
+# 创建用户
 @app.post("/users/crud/create")
 async def create_user(user: UserCreate, db: Session = Depends(get_db)):
     existing_user = db.query(User).filter(User.email == user.email).first()
@@ -43,9 +44,10 @@ async def create_user(user: UserCreate, db: Session = Depends(get_db)):
     if existing_username:
         print("用户名已被占用！")
         raise HTTPException(status_code=400, detail="用户名已被占用！")
+    user.avatar = "/users/avatars/default_avatar.png"
     return CRUD.create_user(db=db, user=user)
 
-# 获取特定用户的GET请求端点
+# 获取特定用户的信息
 @app.get("/users/crud/{user_id}")
 async def read_user(user_id: int, db: Session = Depends(get_db)):
     db_user = CRUD.get_user(db, user_id)
@@ -53,7 +55,7 @@ async def read_user(user_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="用户未找到")  # 用户不存在时抛出HTTP异常
     return db_user
 
-# 更新特定用户的PUT请求端点
+# 更新特定用户
 @app.put("/users/crud/{user_id}")
 async def update_user(
     user_id: int, 
@@ -76,11 +78,14 @@ async def update_user(
     if avatar:
         avatar_path = save_avatar_file(avatar, user_id, path="database/imgs/userAvatars" , static_path='/users/avatars/')
         query_result = db.query(User).filter(User.id == user_id).first()
-        if query_result and os.path.isfile(query_result.avatar_path):
-            # 删除文件
-            os.remove(query_result.avatar_path)
-        else:
-            print("文件不存在")
+        try:
+            if query_result and os.path.isfile(query_result.avatar_path):
+                # 删除文件
+                os.remove(query_result.avatar_path)
+            else:
+                print("文件不存在")
+        except:
+            print("暂无头像")
 
         user.avatar , user.avatar_path= avatar_path[0] , avatar_path[1]
     
@@ -89,12 +94,13 @@ async def update_user(
         raise HTTPException(status_code=404, detail="用户未找到")  # 用户不存在时抛出HTTP异常
     return db_user
 
-# 删除特定用户的DELETE请求端点
+# 删除特定用户
 @app.delete("/users/crud/{user_id}")
 async def delete_user(user_id: int, db: Session = Depends(get_db)):
     CRUD.delete_user(db, user_id)
     return {"detail": "用户已删除"}  # 返回用户已删除的消息
 
+# 登录
 @app.post("/users/login/email")
 async def login_user(infor: UserLogin, db: Session = Depends(get_db)):
     # 根据邮箱从数据库中获取用户
@@ -113,10 +119,21 @@ async def login_user(infor: UserLogin, db: Session = Depends(get_db)):
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="邮箱或密码错误")
 
+# 提交志愿者发起人表格
+@app.put("/tables/volunteersignup/initiate/submit")
+async def tables_volunteersignup_initiate_submit(
+    table: VolunteersInitiate,
+    File: UploadFile = File(None),
+    db: Session = Depends(get_db)
+):
+    pass
+
+# 返回爬虫协议
 @app.get("/robot{path}")
 async def robot(path: str):
     return FileResponse("build/aboutHTML/robots.txt")
 
+# 返回页面
 @app.get("/{catch_all:path}")
 async def catch_all(catch_all: str):
     return FileResponse("build/index.html")

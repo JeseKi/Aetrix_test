@@ -15,6 +15,7 @@ def create_user(db: Session, user: UserCreate):
         username=user.username,
         email=user.email,
         password=user.password,  # 在实际应用中，请确保密码是加密存储的
+        avatar = user.avatar
     )
     db.add(db_user)
     db.commit()
