@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 
-import VolunteerSignUpTable from "../volunteerSignUp/table/volunteerSignUpTable";
+import VolunteerInitiateTable from "../volunteerSignUp/table/volunteerInitiateTable";
 import AetrixNavBar from "../../mainPages/navbar"
 
 export default function Tables () {
@@ -9,7 +9,7 @@ export default function Tables () {
             <div>
                 <AetrixNavBar src="/imgs/mainPageImgs/LogoWithText_black.svg" textColor="black"/>
                 <Routes>
-                    <Route path="volunteersignup" element={<VolunteerSignUpTable />} />
+                    <Route path="volunteerinitiate" element={<VolunteerInitiateTable />} />
                 </Routes>
                 <div style={{height:"10vh"}}></div>
             </div>

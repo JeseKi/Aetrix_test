@@ -55,26 +55,34 @@ function Slide () {
                                 报名志愿者
                             </Accordion.Header>
                             <Accordion.Body>
-                                <NavLink className={({ isActive }) => isActive ? 'link activeLink' : 'link'} to='introduction'>自组织志愿者简介</NavLink><p></p>
-                                <NavLink className={({ isActive }) => isActive ? 'link activeLink' : 'link'} to='signup'>自组织志愿者报名</NavLink>
+                                <NavLink className={({ isActive }) => isActive ? 'link activeLink' : 'link'} to='volunteersignup'>报名志愿者</NavLink><p></p>
+                                <NavLink className={({ isActive }) => isActive ? 'link activeLink' : 'link'} to='volunteerinitiate'>发起自组织</NavLink>
                             </Accordion.Body>
                         </Accordion.Item>
                     </Accordion>
             </div>
             <div className='contentContainer'>
                 <Routes>
-                    <Route path='introduction' element={<Content2 />} />
-                    <Route path='signup' element={<Content2 />} />
+                    <Route path='volunteersignup' element={<SignUp />} />
+                    <Route path='volunteerinitiate' element={<Initiate />} />
                 </Routes>
              </div>
         </div>
     )
 }
 
-function Content2 () {
+function SignUp () {
     return (
         <div className='content'>
-            <NavLink className={({ isActive }) => isActive ? 'link activeLink' : 'link'} to='/tables/volunteersignup'>报名</NavLink><p></p>
+            <NavLink className={({ isActive }) => isActive ? 'link activeLink' : 'link'} to='/tables/volunteersignup'>报名志愿者</NavLink>
+        </div>
+    )
+}
+
+function Initiate () {
+    return(
+        <div className='content'>
+            <NavLink className={({ isActive }) => isActive ? 'link activeLink' : 'link'} to='/tables/volunteerinitiate'>发起自组织</NavLink>
         </div>
     )
 }

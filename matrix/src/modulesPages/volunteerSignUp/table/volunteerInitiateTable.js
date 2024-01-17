@@ -4,9 +4,9 @@ import { Button, Col, Container , Row,} from "react-bootstrap";
 import CompanyIntelligence from "./compoents/company_intelligence";
 import PersonalInformation from "./compoents/personal_information";
 import ExecutionPlan from "./compoents/execution_plan";
-import "./volunteerSignUpTable.css"
+import "./volunteerInitiateTable.css"
 
-export default function VolunteerSignUpTable () {
+export default function VolunteerInitiateTable () {
     // 公司情报
     const [companyName, setCompanyName] = useState(''); // 公司名称
     const [legalRepresentative, setLegalRepresentative] = useState(''); // 法定代表人姓名
