@@ -119,5 +119,4 @@ async def robot(path: str):
 
 @app.get("/{catch_all:path}")
 async def catch_all(catch_all: str):
-    print("已捕获")
     return FileResponse("build/index.html")

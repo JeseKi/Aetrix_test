@@ -1,6 +1,7 @@
 import React  from "react";
 import { Col, Form, Row} from "react-bootstrap";
 
+import SelfOrganizedSelect from "../../../tables/compoents/category_selector";
 // 执行方案
 export default function ExecutionPlan(props) {
     const {
@@ -13,6 +14,7 @@ export default function ExecutionPlan(props) {
       setOnlineOffline,
       setFullTimePartTime,
       setProbationaryCompensation,
+      setCategorySelect,
     } = props;
   
     return (
@@ -47,6 +49,9 @@ export default function ExecutionPlan(props) {
           </Col>
         </Row>
         <Row>
+          <Col>
+            <SelfOrganizedSelect setCategorySelect={setCategorySelect} />
+          </Col>
           <Col>
             <Form.Group>
               <Form.Label>学历要求</Form.Label>

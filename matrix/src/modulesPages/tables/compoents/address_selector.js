@@ -12,7 +12,6 @@ function ProvinceCitySelector({setProvince, setCity}) {
         const newSelectedProvince = e.target.value;
         setSelectedProvince(newSelectedProvince);
         setProvince(newSelectedProvince); // 使用新选定的省份值
-        console.log("所选省份:", newSelectedProvince);
         setSelectedCity(''); // 重置城市选择
         setCity(''); // 也重置外部组件中的城市
     };

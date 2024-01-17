@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 
-import VolunteerSignUpTable from "../volunteerSignUp/table/table";
+import VolunteerSignUpTable from "../volunteerSignUp/table/volunteerSignUpTable";
 import AetrixNavBar from "../../mainPages/navbar"
 
 export default function Tables () {

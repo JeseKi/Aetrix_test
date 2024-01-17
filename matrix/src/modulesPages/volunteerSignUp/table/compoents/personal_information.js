@@ -2,6 +2,7 @@ import React  from "react";
 import { Col, Container , Form, InputGroup, Row, Tab, Tabs } from "react-bootstrap";
 
 import AddressSelector from "../../../tables/compoents/address_selector";
+import UplaodImg from "../../../tables/compoents/upload_img";
 
   // 个人情报
 export default function PersonalInformation(props) {
@@ -69,11 +70,7 @@ export default function PersonalInformation(props) {
           <Col>
             <Form.Group>
               <Form.Label>上传你的个人图片</Form.Label>
-              <Form.Control
-                type="file"
-                placeholder=""
-                onChange={(e) => setPersonalPhoto(e.target.value)}
-              />
+              <UplaodImg setImg={setPersonalPhoto} size_limit={"5mb"}/>
             </Form.Group>
           </Col>
         </Row>

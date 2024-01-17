@@ -4,7 +4,7 @@ import { Button, Col, Container , Row,} from "react-bootstrap";
 import CompanyIntelligence from "./compoents/company_intelligence";
 import PersonalInformation from "./compoents/personal_information";
 import ExecutionPlan from "./compoents/execution_plan";
-import "./table.css"
+import "./volunteerSignUpTable.css"
 
 export default function VolunteerSignUpTable () {
     // 公司情报
@@ -44,6 +44,9 @@ export default function VolunteerSignUpTable () {
     const [fullTimePartTime, setFullTimePartTime] = useState(false); // 全职/兼职
     const [probationaryCompensation, setProbationaryCompensation] = useState(false); // 试用期间报酬 (有/无)
 
+    // 选择自组织种类
+    const [CategorySelect , setCategorySelect] = useState(''); // 是否选择自组织种类]
+
     // 表单字典
     const fieldsToCheck = [
         { value: companyName, name: "公司名称" },
@@ -74,6 +77,7 @@ export default function VolunteerSignUpTable () {
         { value: educationRequirement, name: "学历要求" },
         { value: personalIntroduction, name: "个人内容介绍 (PR)" },
         { value: skills, name: "领域必要相关技能" },
+        { value: CategorySelect, name: "自组织种类" },
       ];
       
     // 处理表单提交
@@ -119,6 +123,7 @@ export default function VolunteerSignUpTable () {
         // console.log("是否是线上?", onlineOffline);
         // console.log("全职/兼职:", fullTimePartTime);
         // console.log("试用期间报酬 (有/无):", probationaryCompensation);
+        // console.log("自组织种类:", CategorySelect);
         for (const field of fieldsToCheck) {
             if (!field.value) {
                 alert(`${field.name}不能为空`);
@@ -129,7 +134,7 @@ export default function VolunteerSignUpTable () {
         
         if (!hasEmptyFields) {
             console.log("提交表单");
-            // 这里可以执行实际的表单提交操作
+            
         };        
     };
 
@@ -180,6 +185,7 @@ export default function VolunteerSignUpTable () {
                   setOnlineOffline={setOnlineOffline}
                   setFullTimePartTime={setFullTimePartTime}
                   setProbationaryCompensation={setProbationaryCompensation}
+                  setCategorySelect={setCategorySelect}
                 />
             </Container>
             <Row>

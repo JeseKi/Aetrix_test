@@ -6,6 +6,7 @@ import AetrixNavBar from "../navbar";
 import Login from "./login/login";
 import SignUp from "./signup/signup";
 import "./user.css"
+import UplaodImg from "../../modulesPages/tables/compoents/upload_img";
 
 export default function User () {
 
@@ -35,7 +36,6 @@ function UserInfor() {
 
     // 处理上传的图片文件
     const [file, setFile] = useState(null);
-    const fileInputRef = useRef();
 
     // 从 URL 参数中提取 userID，用 useParams() 钩子
     const { userID } = useParams();
@@ -89,7 +89,8 @@ function UserInfor() {
         })
         .then(response => {
             if (response.status === 200) {
-                console.log("保存成功！"); // 如果响应状态为200，显示保存成功提示
+                alert("保存成功！"); // 如果响应状态为200，显示保存成功提示
+                window.location.reload();
             };
             return response.json();
         })
@@ -98,31 +99,6 @@ function UserInfor() {
         })
         .catch(error => console.error('Error:', error)); // 处理错误
     }
-
-    // 处理文件的限制
-    const handleFileChange = (e) => {
-        const selectedFile = e.target.files[0];
-    
-        if (!selectedFile) {
-            return;
-        }
-    
-        // 检查文件类型
-        if (!selectedFile.type.match('image/png') && !selectedFile.type.match('image/jpeg')) {
-            alert('请上传PNG或JPEG格式的图片。');
-            e.target.value = ''; // 清除选中的文件
-            return;
-        }
-    
-        // 检查文件大小 (5MB)
-        if (selectedFile.size > 5242880) {
-            alert('图片大小不能超过5MB。');
-            e.target.value = ''; // 清除选中的文件
-            return;
-        }
-    
-        setFile(selectedFile);
-    };    
 
     // 渲染用户信息表单
     return (
@@ -134,7 +110,7 @@ function UserInfor() {
                     <Form>
                         <Row>
                             <Form.Label>更改头像?</Form.Label>
-                            <Form.Control ref={fileInputRef} type="file" accept="image/png, image/jpeg" onChange={handleFileChange} />
+                            <UplaodImg setImg={setFile} size_limit={"5"}/>
                         </Row>
                         <Form.Group className="formMargin">
                             <Row>
