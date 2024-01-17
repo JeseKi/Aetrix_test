@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
-from .models import User , UserCreate
+from aetrix_database.models import User
+from request_body_schema.user import UserCreate
 
 # 通过用户ID获取用户
 def get_user(db: Session, user_id: int):

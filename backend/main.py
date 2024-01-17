@@ -5,13 +5,18 @@ from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 import os
 
-import database.crud as CRUD
-from database.models import SessionLocal , UserCreate, UserLogin , User 
-from database.table_models.volunteer_sign_up import VolunteersInitiate
-from utils.imgSave import save_avatar_file
+###### 数据库包 ######
+import aetrix_database.user_crud as user_crud
+from aetrix_database.models import SessionLocal , User  , VolunteersInitiateModel
+
+###### 请求体包 ######
+from request_body_schema.user import UserCreate, UserLogin
+from request_body_schema.volunteer_sign_up import VolunteersInitiate
+
+from utils.imgSave import save_img_file
 
 app = FastAPI()
-app.mount("/users/avatars/", StaticFiles(directory="database/imgs/userAvatars"), name="avatars")
+app.mount("/users/avatars/", StaticFiles(directory="aetrix_database/imgs/userAvatars"), name="avatars")
 app.mount("/imgs", StaticFiles(directory="build/imgs"), name="imgs")
 app.mount("/static",StaticFiles(directory="build/static"), name="static")
 
@@ -45,12 +50,12 @@ async def create_user(user: UserCreate, db: Session = Depends(get_db)):
         print("用户名已被占用！")
         raise HTTPException(status_code=400, detail="用户名已被占用！")
     user.avatar = "/users/avatars/default_avatar.png"
-    return CRUD.create_user(db=db, user=user)
+    return user_crud.create_user(db=db, user=user)
 
 # 获取特定用户的信息
 @app.get("/users/crud/{user_id}")
 async def read_user(user_id: int, db: Session = Depends(get_db)):
-    db_user = CRUD.get_user(db, user_id)
+    db_user = user_crud.get_user(db, user_id)
     if db_user is None:
         raise HTTPException(status_code=404, detail="用户未找到")  # 用户不存在时抛出HTTP异常
     return db_user
@@ -76,7 +81,7 @@ async def update_user(
         bio=bio
     )
     if avatar:
-        avatar_path = save_avatar_file(avatar, user_id, path="database/imgs/userAvatars" , static_path='/users/avatars/')
+        avatar_path = save_img_file(avatar, user_id, path="aetrix_database/imgs/userAvatars" , static_path='/users/avatars/')
         query_result = db.query(User).filter(User.id == user_id).first()
         try:
             if query_result and os.path.isfile(query_result.avatar_path):
@@ -89,7 +94,7 @@ async def update_user(
 
         user.avatar , user.avatar_path= avatar_path[0] , avatar_path[1]
     
-    db_user = CRUD.update_user(db, user_id, user=user)
+    db_user = user_crud.update_user(db, user_id, user=user)
     if db_user is None:
         raise HTTPException(status_code=404, detail="用户未找到")  # 用户不存在时抛出HTTP异常
     return db_user
@@ -97,7 +102,7 @@ async def update_user(
 # 删除特定用户
 @app.delete("/users/crud/{user_id}")
 async def delete_user(user_id: int, db: Session = Depends(get_db)):
-    CRUD.delete_user(db, user_id)
+    user_crud.delete_user(db, user_id)
     return {"detail": "用户已删除"}  # 返回用户已删除的消息
 
 # 登录
@@ -164,8 +169,48 @@ async def tables_volunteersignup_initiate_submit(
     # 选择自组织种类
     CategorySelect: str = Form(...),  # 是否选择自组织种类
 ):
-    # 这里可以使用上述参数来处理数据
-    # 例如，可以保存表单数据到数据库或执行其他逻辑
+    table = VolunteersInitiate(
+        companyName=companyName,
+        legalRepresentative=legalRepresentative,
+        establishmentDate=establishmentDate,
+        capital=capital,
+        totalEmployees=totalEmployees,
+        maleEmployees=maleEmployees,
+        femaleEmployees=femaleEmployees,
+        businessContent=businessContent,
+        specialty=specialty,
+        companyProvince=companyProvince,
+        companyCity=companyCity,
+        companyDetailedAddress=companyDetailedAddress,
+        isCompanyAbroad=isCompanyAbroad,
+        companyZipcode=companyZipcode,
+        fullName=fullName,
+        gender=gender,
+        birthdate=birthdate,
+        phone=phone,
+        # personalPhoto=personalPhoto, 个人图片先不忙着加进去
+        personalProvince=personalProvince,
+        personalCity=personalCity,
+        personalDetailedAddress=personalDetailedAddress,
+        isPersonalAbroad=isPersonalAbroad,
+        personalZipcode=personalZipcode,
+        recruiters=recruiters,
+        requiredCount=requiredCount,
+        taskType=taskType,
+        educationRequirement=educationRequirement,
+        personalIntroduction=personalIntroduction,
+        skills=skills,
+        onlineOffline=onlineOffline,
+        fullTimePartTime=fullTimePartTime,
+        probationaryCompensation=probationaryCompensation,
+        CategorySelect=CategorySelect,
+    )
+    
+    img_path = save_img_file(personalPhoto, user_id=0 , path="aetrix_database/imgs/aboutTables/volunteersSignUp/initiate" , static_path='/tables/imgs/')
+    static_path , file_path = img_path[0] , img_path[1]
+    table.personalPhoto , table.personalPhotoPath= static_path , file_path
+    for i in table:
+        print(i)
     return {"message": "表格已成功提交"}
 
 

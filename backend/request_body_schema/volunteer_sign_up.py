@@ -25,6 +25,7 @@ class VolunteersInitiate(BaseModel):
     birthdate: str = ''
     phone: str = ''
     personalPhoto: Optional[str] = None
+    personalPhotoPath: Optional[str] = None
     personalProvince: str = ''
     personalCity: str = ''
     personalDetailedAddress: str = ''
