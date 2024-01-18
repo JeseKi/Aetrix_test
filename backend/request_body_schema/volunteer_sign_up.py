@@ -45,3 +45,32 @@ class VolunteersInitiate(BaseModel):
 
     # 选择自组织种类
     CategorySelect: str = ''
+
+class VolunteersSignUp(BaseModel):
+    user_id: Optional[int] = 1
+    # 个人信息
+    fullName: str = ''
+    gender: str = None
+    birthdate: str = ''
+    phone: str = ''
+    personalPhoto: Optional[str] = None
+    personalProvince: str = ''
+    personalCity: str = ''
+    personalDetailedAddress: str = ''
+    isPersonalAbroad: bool = False
+    personalZipcode: str = ''
+
+    # 其他信息
+    CategorySelect: str = ''
+    executionPlan: str = ''
+    resume: str = ''
+    wechat: str = ''
+    volunteerDescription: str = ''
+    volunteerTasks: str = ''
+    personalExpectations: str = ''
+    interviewAppointment: bool = False
+    onlineInterviewAcceptance: bool = False
+    communityWorkForm: str = ''
+
+    class Config:
+        from_attributes = True

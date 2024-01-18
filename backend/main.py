@@ -1,25 +1,30 @@
+###### 第三方库 ######
 from fastapi import FastAPI, Depends, HTTPException , File , UploadFile , Form , status
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 import os
-from typing import List
 
 ###### 数据库包 ######
-#CRUD操作
+# CRUD操作
 import aetrix_database.user_crud as user_crud
+
 import aetrix_database.tables.tables_crud.volunteerSignUp as volunteer_crud
+volunteer_initiate_crud = volunteer_crud.VolunteersInitiateCRUD()
+
 # 数据库模型
-from aetrix_database.models import SessionLocal , User  , VolunteersInitiateModel
+from aetrix_database.models import SessionLocal , User 
 
 ###### 请求体包 ######
 from request_body_schema.user import UserCreate, UserLogin
 from request_body_schema.volunteer_sign_up import VolunteersInitiate
 
+###### 工具包 ######
 from utils import Utils
-
 utils = Utils()
+
+###### APP ######
 app = FastAPI()
 app.mount("/users/avatars/", StaticFiles(directory="aetrix_database/imgs/userAvatars"), name="avatars")
 app.mount("/imgs", StaticFiles(directory="build/imgs"), name="imgs")
@@ -45,6 +50,9 @@ def get_db():
 # 创建用户
 @app.post("/users/crud/create")
 async def create_user(user: UserCreate, db: Session = Depends(get_db)):
+    # 测试阶段
+    utils.on_test("注册功能")
+    
     existing_user = db.query(User).filter(User.email == user.email).first()
     if existing_user:
         print("邮件已存在！")
@@ -86,7 +94,7 @@ async def update_user(
         bio=bio
     )
     if avatar:
-        avatar_path = utils.save_img_file(avatar, user_id, path="aetrix_database/imgs/userAvatars" , static_path='/users/avatars/')
+        avatar_path = utils.save_file(file=avatar, user_id=user_id, path="aetrix_database/imgs/userAvatars" , static_path='/users/avatars/')
         query_result = db.query(User).filter(User.id == user_id).first()
         try:
             if query_result and os.path.isfile(query_result.avatar_path):
@@ -113,6 +121,9 @@ async def delete_user(user_id: int, db: Session = Depends(get_db)):
 # 登录
 @app.post("/users/login/email")
 async def login_user(infor: UserLogin, db: Session = Depends(get_db)):
+    # 测试阶段
+    utils.on_test("登录功能")
+    
     # 根据邮箱从数据库中获取用户
     user = db.query(User).filter(User.email == infor.email).first()
 
@@ -168,7 +179,7 @@ async def tables_volunteersignup_initiate_submit(
     personalIntroduction: str = Form(...),  # 个人内容介绍 (PR)
     skills: str = Form(...),  # 领域必要相关技能
     onlineOffline: bool = Form(...),  # 是否是线上?
-    fullTimePartTime: bool = Form(...),  # 全职/兼职
+    fullTimePartTime: bool = Form(...),  # 全职/兼职 
     probationaryCompensation: bool = Form(...),  # 试用期间报酬 (有/无)
 
     # 选择自组织种类
@@ -177,7 +188,9 @@ async def tables_volunteersignup_initiate_submit(
     # 数据库
     db = Depends(get_db)
 ):
+    # 测试阶段
     utils.on_test("上传自组织发起人表格")
+    
     table = VolunteersInitiate(
         companyName=companyName,
         legalRepresentative=legalRepresentative,
@@ -215,34 +228,41 @@ async def tables_volunteersignup_initiate_submit(
         CategorySelect=CategorySelect,
     )
     
-    img_path = utils.save_img_file(personalPhoto, user_id=114514 , path="aetrix_database/imgs/aboutTables/volunteersSignUp/initiate" , static_path='/tables/imgs/')
+    # 在这里加入个人图片的处理
+    img_path = utils.save_file(file=personalPhoto, user_id=114514 , path="aetrix_database/imgs/aboutTables/volunteersSignUp/initiate" , static_path='/tables/imgs/')
     static_path , file_path = img_path[0] , img_path[1]
     table.personalPhoto , table.personalPhotoPath= static_path , file_path
+    # 测试
     for i in table:
         print(i)
+    
+    # 保存表单
     try:
         db_user = user_crud.get_user(db, table.user_id)
-        volunteer_crud.create_volunteers_initiate(db, table, user=db_user)
+        volunteer_initiate_crud.create_volunteers_initiate(db, table, user=db_user)
     except Exception as e:
         print(e)
         raise HTTPException(status_code=400, detail="表单提交失败")
     return {"message": "表格已成功提交"}
 
+# 根据用户ID获取所有志愿者发起人表格
 @app.get("/tables/volunteersignup/initiate/user/{user_id}")
-def read_volunteer_initiates_by_user(user_id: int, db: Session = Depends(get_db)):
-    return volunteer_crud.get_volunteer_initiates_by_user_id(db, user_id)
+async def read_volunteer_initiates_by_user(user_id: int, db: Session = Depends(get_db)):
+    return volunteer_initiate_crud.get_volunteer_initiates_by_user_id(db, user_id)
 
+# 根据发起人ID获取特定志愿者发起人表格
 @app.get("/table/volunteersignup/initiate/{initiate_id}")
-def read_volunteer_initiate(initiate_id: int, db: Session = Depends(get_db)):
-    volunteer_initiate = volunteer_crud.get_volunteer_initiate_by_id(db, initiate_id)
+async def read_volunteer_initiate(initiate_id: int, db: Session = Depends(get_db)):
+    volunteer_initiate = volunteer_initiate_crud.get_volunteer_initiate_by_id(db, initiate_id)
     if volunteer_initiate is None:
         raise HTTPException(status_code=404, detail="表单未找到")
     return volunteer_initiate
 
+# 删除特定志愿者发起人表格
 @app.delete("/table/volunteersignup/initiate/{initiate_id}")
-def delete_volunteers_initiate(initiate_id: int, db: Session = Depends(get_db)):
+async def delete_volunteers_initiate(initiate_id: int, db: Session = Depends(get_db)):
     try:
-        volunteer_crud.delete_volunteers_initiate(db, initiate_id)
+        volunteer_initiate_crud.delete_volunteers_initiate(db, initiate_id)
         return {"message": "表单已删除"}
     except:
         return {"message": "表单删除失败"}

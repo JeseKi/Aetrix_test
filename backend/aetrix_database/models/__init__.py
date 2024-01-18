@@ -86,5 +86,38 @@ class VolunteersInitiateModel(UserRelatedModel):
     # 定义与User的关系
     user = relationship("User", back_populates="volunteer_initiates")
     
+class VolunteersSignUpModel(UserRelatedModel):
+    __tablename__ = 'volunteers_sign_up'
+
+    id = Column(Integer, primary_key=True, index=True)
+
+    # 个人信息
+    fullName = Column(String, default='')
+    gender = Column(String)
+    birthdate = Column(String, default='')
+    phone = Column(String, default='')
+    personalPhoto = Column(String, default='')
+    personalPhotoPath = Column(String, default='')
+    personalProvince = Column(String, default='')
+    personalCity = Column(String, default='')
+    personalDetailedAddress = Column(String, default='')
+    isPersonalAbroad = Column(Boolean, default=False)
+    personalZipcode = Column(String, default='')
+
+    # 其他信息
+    CategorySelect = Column(String, default='')
+    executionPlan = Column(String, default='')
+    resume = Column(String, default='')
+    wechat = Column(String, default='')
+    volunteerDescription = Column(String, default='')
+    volunteerTasks = Column(String, default='')
+    personalExpectations = Column(String, default='')
+    interviewAppointment = Column(Boolean, default=False)
+    onlineInterviewAcceptance = Column(Boolean, default=False)
+    communityWorkForm = Column(String, default='')
+
+    # 定义与User的关系
+    user = relationship("User", back_populates="volunteer_sign_ups")
+    
 # 创建所有模型的数据库表
 Base.metadata.create_all(bind=engine)
