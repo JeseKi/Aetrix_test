@@ -1,7 +1,7 @@
 import React from "react";
 import { Col, Container , Form, InputGroup, Row, Tab, Tabs } from "react-bootstrap";
 
-import AddressSelector from "../../../tables/compoents/address_selector";
+import Address_Table from "../../../tables/compoents/address_selector";
 
 // 公司情报
 export default function CompanyIntelligence(props) {
@@ -115,67 +115,7 @@ export default function CompanyIntelligence(props) {
             />
           </Form.Group>
         </Row>
-        <Container className="littleContainer">
-          <h3>地址信息</h3>
-          <Tabs>
-            <Tab eventKey="Domestic" title="国内">
-              <Row>
-                <Col>
-                  <AddressSelector
-                    setProvince={setCompanyProvince}
-                    setCity={setCompanyCity}
-                  />
-                </Col>
-                <Col>
-                  <Form.Group>
-                    <Form.Label>详细地址</Form.Label>
-                    <Form.Control
-                      placeholder="XX区XX街道..."
-                      onChange={(e) => {
-                        setCompanyDetailedAddress(e.target.value)
-                        setIsCompanyAbroad(false)
-                    }}
-                    />
-                  </Form.Group>
-                </Col>
-                <Col>
-                  <Form.Group>
-                    <Form.Label>邮编</Form.Label>
-                    <Form.Control
-                      placeholder="123456"
-                      onChange={(e) => setCompanyZipcode(e.target.value)}
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
-            </Tab>
-            <Tab eventKey="Foreign" title="国外">
-              <Row>
-                <Col>
-                  <Form.Group>
-                    <Form.Label>详细地址</Form.Label>
-                    <Form.Control
-                      placeholder="XX区XX街道..."
-                      onChange={(e) => {
-                        setCompanyDetailedAddress(e.target.value)
-                        setIsCompanyAbroad(true)
-                    }}
-                    />
-                  </Form.Group>
-                </Col>
-                <Col>
-                  <Form.Group>
-                    <Form.Label>邮编</Form.Label>
-                    <Form.Control
-                      placeholder="123456"
-                      onChange={(e) => setCompanyZipcode(e.target.value)}
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
-            </Tab>
-          </Tabs>
-        </Container>
+        <Address_Table title={"公司地址"} setProvince={setCompanyProvince} setCity={setCompanyCity} setDetailedAddress={setCompanyDetailedAddress} setIsAbroad={setIsCompanyAbroad} setZipcode={setCompanyZipcode} />
       </Form>
     );
   };

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Col, Form, Row } from 'react-bootstrap';
+import { Col, Form, Row , Tabs, Tab, Container } from 'react-bootstrap';
 
 import pc_data from "./pc.json"
 
@@ -79,4 +79,78 @@ function ProvinceCitySelector({ setProvince, setCity }) {
     );
 }
 
-export default ProvinceCitySelector;
+function Address_Table({title , setProvince, setCity, setDetailedAddress, setIsAbroad, setZipcode}) {
+  const littleContainer = {
+    boxShadow: '3px 3px 10px #AAAAAA',
+    borderRadius: '10px',
+    marginTop: '1vh',
+    marginBottom: '1vh',
+    padding: '1vw',
+  };
+  
+    return (
+        <Container style={littleContainer}>
+        <h3>{title}</h3>
+        <Tabs>
+          <Tab eventKey="Domestic" title="国内">
+            <Row>
+              <Col>
+                <ProvinceCitySelector
+                  setProvince={setProvince}
+                  setCity={setCity}
+                />
+              </Col>
+              <Col>
+                <Form.Group>
+                  <Form.Label>详细地址</Form.Label>
+                  <Form.Control
+                    placeholder="XX区XX街道..."
+                    onChange={(e) => {
+                      setDetailedAddress(e.target.value)
+                      setIsAbroad(false)
+                  }}
+                  />
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group>
+                  <Form.Label>邮编</Form.Label>
+                  <Form.Control
+                    placeholder="123456"
+                    onChange={(e) => setZipcode(e.target.value)}
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+          </Tab>
+          <Tab eventKey="Foreign" title="国外">
+            <Row>
+              <Col>
+                <Form.Group>
+                  <Form.Label>详细地址</Form.Label>
+                  <Form.Control
+                    placeholder="XX区XX街道..."
+                    onChange={(e) => {
+                      setDetailedAddress(e.target.value)
+                      setIsAbroad(true)
+                  }}
+                  />
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group>
+                  <Form.Label>邮编</Form.Label>
+                  <Form.Control
+                    placeholder="123456"
+                    onChange={(e) => setZipcode(e.target.value)}
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+          </Tab>
+        </Tabs>
+      </Container>
+    )
+}
+
+export default Address_Table;

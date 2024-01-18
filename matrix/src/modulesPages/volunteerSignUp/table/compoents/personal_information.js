@@ -1,7 +1,7 @@
 import React  from "react";
-import { Col, Container , Form, InputGroup, Row, Tab, Tabs } from "react-bootstrap";
+import { Col, Form, InputGroup, Row} from "react-bootstrap";
 
-import AddressSelector from "../../../tables/compoents/address_selector";
+import Address_Table from "../../../tables/compoents/address_selector";
 import UplaodImg from "../../../tables/compoents/upload_img";
 
   // 个人情报
@@ -74,67 +74,7 @@ export default function PersonalInformation(props) {
             </Form.Group>
           </Col>
         </Row>
-        <Container className="littleContainer">
-          <h3>所在地</h3>
-          <Tabs>
-            <Tab eventKey="Domestic" title="国内">
-              <Row>
-                <Col>
-                  <AddressSelector
-                    setProvince={setPersonalProvince}
-                    setCity={setPersonalCity}
-                  />
-                </Col>
-                <Col>
-                  <Form.Group>
-                    <Form.Label>详细地址</Form.Label>
-                    <Form.Control
-                      placeholder="XX区XX街道..."
-                      onChange={(e) => {
-                        setPersonalDetailedAddress(e.target.value)
-                        setIsPersonalAbroad(false)
-                    }}
-                    />
-                  </Form.Group>
-                </Col>
-                <Col>
-                  <Form.Group>
-                    <Form.Label>邮编</Form.Label>
-                    <Form.Control
-                      placeholder="123456"
-                      onChange={(e) => setPersonalZipcode(e.target.value)}
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
-            </Tab>
-            <Tab eventKey="Foreign" title="国外">
-              <Row>
-                <Col>
-                  <Form.Group>
-                    <Form.Label>详细地址</Form.Label>
-                    <Form.Control
-                      placeholder="XX区XX街道..."
-                      onChange={(e) => {
-                        setPersonalDetailedAddress(e.target.value)
-                        setIsPersonalAbroad(true)
-                    }}
-                    />
-                  </Form.Group>
-                </Col>
-                <Col>
-                  <Form.Group>
-                    <Form.Label>邮编</Form.Label>
-                    <Form.Control
-                      placeholder="123456"
-                      onChange={(e) => setPersonalZipcode(e.target.value)}
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
-            </Tab>
-          </Tabs>
-        </Container>
+      <Address_Table title={"个人地址"} setCity={setPersonalCity} setProvince={setPersonalProvince} setDetailedAddress={setPersonalDetailedAddress} setAbroad={setIsPersonalAbroad} setZipcode={setPersonalZipcode}/>
       </Form>
     );
   };
