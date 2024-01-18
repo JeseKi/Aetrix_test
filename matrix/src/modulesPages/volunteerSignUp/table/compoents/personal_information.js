@@ -2,7 +2,7 @@ import React  from "react";
 import { Col, Form, InputGroup, Row} from "react-bootstrap";
 
 import Address_Table from "../../../tables/compoents/address_selector";
-import UplaodImg from "../../../tables/compoents/upload_img";
+import UploadFile from "../../../tables/compoents/upload_img";
 
   // 个人情报
 export default function PersonalInformation(props) {
@@ -70,7 +70,7 @@ export default function PersonalInformation(props) {
           <Col>
             <Form.Group>
               <Form.Label>上传你的个人图片</Form.Label>
-              <UplaodImg setImg={setPersonalPhoto} size_limit={"5"}/>
+              <UploadFile setUploadFile={setPersonalPhoto} size_limit={3} fileTypes={["image/jpeg","image/png"]}/>
             </Form.Group>
           </Col>
         </Row>
