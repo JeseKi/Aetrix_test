@@ -45,7 +45,7 @@ export default function VolunteerInitiateTable () {
     const [probationaryCompensation, setProbationaryCompensation] = useState(false); // 试用期间报酬 (有/无)
 
     // 选择自组织种类
-    const [CategorySelect , setCategorySelect] = useState(''); // 是否选择自组织种类]
+    const [CategorySelect , setCategorySelect] = useState(''); // 选择自组织种类
 
     // 表单字典
     const fieldsToCheck = [

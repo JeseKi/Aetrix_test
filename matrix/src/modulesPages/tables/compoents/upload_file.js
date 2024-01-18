@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
  * UploadFile 组件用于上传文件。
  * 
  * Props:
- *   setImg: 用于设置父组件中文件状态的函数。
+ *   setUploadFile: 用于设置父组件中文件状态的函数。
  *   size_limit: 文件大小限制（以MB为单位）。
  *   fileTypes: 允许的文件类型数组。
  * 

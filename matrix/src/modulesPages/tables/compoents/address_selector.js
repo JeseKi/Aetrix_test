@@ -4,13 +4,14 @@ import { Col, Form, Row , Tabs, Tab, Container } from 'react-bootstrap';
 import pc_data from "./pc.json"
 
 /**
- * ProvinceCitySelector 组件用于选择省份和城市。
- * 
- * Props:
- * - setProvince: 一个函数，用于设置父组件中的省份状态。
- * - setCity: 一个函数，用于设置父组件中的城市状态。
+ * Address_Table 组件用于显示地址信息表格。
+ * @param {string} title - 表格标题。
+ * @param {function} setProvince - 用于设置省份的回调函数。
+ * @param {function} setCity - 用于设置城市的回调函数。
+ * @param {function} setDetailedAddress - 用于设置详细地址的回调函数。
+ * @param {function} setIsAbroad - 用于设置是否为国外地址的回调函数。
+ * @param {function} setZipcode - 用于设置邮编的回调函数。
  */
-
 function Address_Table({title , setProvince, setCity, setDetailedAddress, setIsAbroad, setZipcode}) {
   const littleContainer = {
     boxShadow: '3px 3px 10px #AAAAAA',
@@ -19,71 +20,80 @@ function Address_Table({title , setProvince, setCity, setDetailedAddress, setIsA
     marginBottom: '1vh',
     padding: '1vw',
   };
-  
-    return (
-        <Container style={littleContainer}>
-        <h3>{title}</h3>
-        <Tabs>
-          <Tab eventKey="Domestic" title="国内">
-            <Row>
-              <Col>
-                <ProvinceCitySelector
-                  setProvince={setProvince}
-                  setCity={setCity}
+
+  return (
+    <Container style={littleContainer}>
+      <h3>{title}</h3>
+      <Tabs>
+        <Tab eventKey="Domestic" title="国内">
+          <Row>
+            <Col>
+              <ProvinceCitySelector
+                setProvince={setProvince}
+                setCity={setCity}
+              />
+            </Col>
+            <Col>
+              <Form.Group>
+                <Form.Label>详细地址</Form.Label>
+                <Form.Control
+                  placeholder="XX区XX街道..."
+                  onChange={(e) => {
+                    setDetailedAddress(e.target.value);
+                    setIsAbroad(false);
+                  }}
                 />
-              </Col>
-              <Col>
-                <Form.Group>
-                  <Form.Label>详细地址</Form.Label>
-                  <Form.Control
-                    placeholder="XX区XX街道..."
-                    onChange={(e) => {
-                      setDetailedAddress(e.target.value)
-                      setIsAbroad(false)
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group>
+                <Form.Label>邮编</Form.Label>
+                <Form.Control
+                  placeholder="123456"
+                  onChange={(e) => setZipcode(e.target.value)}
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+        </Tab>
+        <Tab eventKey="Foreign" title="国外">
+          <Row>
+            <Col>
+              <Form.Group>
+                <Form.Label>详细地址</Form.Label>
+                <Form.Control
+                  placeholder="XX区XX街道..."
+                  onChange={(e) => {
+                    setDetailedAddress(e.target.value);
+                    setIsAbroad(true);
                   }}
-                  />
-                </Form.Group>
-              </Col>
-              <Col>
-                <Form.Group>
-                  <Form.Label>邮编</Form.Label>
-                  <Form.Control
-                    placeholder="123456"
-                    onChange={(e) => setZipcode(e.target.value)}
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
-          </Tab>
-          <Tab eventKey="Foreign" title="国外">
-            <Row>
-              <Col>
-                <Form.Group>
-                  <Form.Label>详细地址</Form.Label>
-                  <Form.Control
-                    placeholder="XX区XX街道..."
-                    onChange={(e) => {
-                      setDetailedAddress(e.target.value)
-                      setIsAbroad(true)
-                  }}
-                  />
-                </Form.Group>
-              </Col>
-              <Col>
-                <Form.Group>
-                  <Form.Label>邮编</Form.Label>
-                  <Form.Control
-                    placeholder="123456"
-                    onChange={(e) => setZipcode(e.target.value)}
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
-          </Tab>
-        </Tabs>
-      </Container>
-    )
+                />
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group>
+                <Form.Label>邮编</Form.Label>
+                <Form.Control
+                  placeholder="123456"
+                  onChange={(e) => setZipcode(e.target.value)}
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+        </Tab>
+      </Tabs>
+    </Container>
+  );
 }
+
+
+/**
+ * ProvinceCitySelector 组件用于选择省份和城市。
+ * 
+ * Props:
+ * - setProvince: 一个函数，用于设置父组件中的省份状态。
+ * - setCity: 一个函数，用于设置父组件中的城市状态。
+ */
 
 function ProvinceCitySelector({ setProvince, setCity }) {
   // 使用 useState 创建 provinces、selectedProvince 和 selectedCity 状态

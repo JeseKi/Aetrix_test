@@ -6,7 +6,7 @@ import AetrixNavBar from "../navbar";
 import Login from "./login/login";
 import SignUp from "./signup/signup";
 import "./user.css"
-import UplaodImg from "../../modulesPages/tables/compoents/upload_img";
+import UplaodFile from "../../modulesPages/tables/compoents/upload_file";
 
 export default function User () {
 
@@ -110,7 +110,7 @@ function UserInfor() {
                     <Form>
                         <Row>
                             <Form.Label>更改头像?</Form.Label>
-                            <UplaodImg setImg={setFile} size_limit={"5"}/>
+                            <UplaodFile setImg={setFile} size_limit={3} fileTypes={['image/jpeg', 'image/png']}/>
                         </Row>
                         <Form.Group className="formMargin">
                             <Row>

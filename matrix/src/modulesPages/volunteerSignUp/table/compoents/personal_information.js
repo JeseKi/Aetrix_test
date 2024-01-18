@@ -2,7 +2,7 @@ import React  from "react";
 import { Col, Form, InputGroup, Row} from "react-bootstrap";
 
 import Address_Table from "../../../tables/compoents/address_selector";
-import UploadFile from "../../../tables/compoents/upload_img";
+import UploadFile from "../../../tables/compoents/upload_file";
 
   // 个人情报
 export default function PersonalInformation(props) {
