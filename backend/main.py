@@ -17,8 +17,9 @@ from aetrix_database.models import SessionLocal , User  , VolunteersInitiateMode
 from request_body_schema.user import UserCreate, UserLogin
 from request_body_schema.volunteer_sign_up import VolunteersInitiate
 
-from utils.imgSave import save_img_file
+from utils import Utils
 
+utils = Utils()
 app = FastAPI()
 app.mount("/users/avatars/", StaticFiles(directory="aetrix_database/imgs/userAvatars"), name="avatars")
 app.mount("/imgs", StaticFiles(directory="build/imgs"), name="imgs")
@@ -85,7 +86,7 @@ async def update_user(
         bio=bio
     )
     if avatar:
-        avatar_path = save_img_file(avatar, user_id, path="aetrix_database/imgs/userAvatars" , static_path='/users/avatars/')
+        avatar_path = utils.save_img_file(avatar, user_id, path="aetrix_database/imgs/userAvatars" , static_path='/users/avatars/')
         query_result = db.query(User).filter(User.id == user_id).first()
         try:
             if query_result and os.path.isfile(query_result.avatar_path):
@@ -176,6 +177,7 @@ async def tables_volunteersignup_initiate_submit(
     # 数据库
     db = Depends(get_db)
 ):
+    utils.on_test("上传自组织发起人表格")
     table = VolunteersInitiate(
         companyName=companyName,
         legalRepresentative=legalRepresentative,
@@ -213,7 +215,7 @@ async def tables_volunteersignup_initiate_submit(
         CategorySelect=CategorySelect,
     )
     
-    img_path = save_img_file(personalPhoto, user_id=0 , path="aetrix_database/imgs/aboutTables/volunteersSignUp/initiate" , static_path='/tables/imgs/')
+    img_path = utils.save_img_file(personalPhoto, user_id=114514 , path="aetrix_database/imgs/aboutTables/volunteersSignUp/initiate" , static_path='/tables/imgs/')
     static_path , file_path = img_path[0] , img_path[1]
     table.personalPhoto , table.personalPhotoPath= static_path , file_path
     for i in table:

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect } from 'react';
 import { Col, Form, Row , Tabs, Tab, Container } from 'react-bootstrap';
 
 import pc_data from "./pc.json"
@@ -12,7 +12,33 @@ import pc_data from "./pc.json"
  * @param {function} setIsAbroad - 用于设置是否为国外地址的回调函数。
  * @param {function} setZipcode - 用于设置邮编的回调函数。
  */
-function Address_Table({title , setProvince, setCity, setDetailedAddress, setIsAbroad, setZipcode}) {
+function Address_Table({ title, setProvince, setCity, setDetailedAddress, setIsAbroad, setZipcode }) {
+  const [domesticAddress, setDomesticAddress] = useState({
+    province: '',
+    city: '',
+    detailedAddress: '',
+    zipcode: '',
+  });
+  const [foreignAddress, setForeignAddress] = useState({
+    detailedAddress: '',
+    zipcode: '',
+  });
+  const [activeTab, setActiveTab] = useState('Domestic');
+
+  useEffect(() => {
+    if (activeTab === 'Domestic') {
+      setProvince(domesticAddress.province);
+      setCity(domesticAddress.city);
+      setDetailedAddress(domesticAddress.detailedAddress);
+      setZipcode(domesticAddress.zipcode);
+      setIsAbroad(false);
+    } else {
+      setDetailedAddress(foreignAddress.detailedAddress);
+      setZipcode(foreignAddress.zipcode);
+      setIsAbroad(true);
+    }
+  }, [activeTab, domesticAddress, foreignAddress, setProvince, setCity, setDetailedAddress, setZipcode, setIsAbroad]);
+
   const littleContainer = {
     boxShadow: '3px 3px 10px #AAAAAA',
     borderRadius: '10px',
@@ -24,13 +50,13 @@ function Address_Table({title , setProvince, setCity, setDetailedAddress, setIsA
   return (
     <Container style={littleContainer}>
       <h3>{title}</h3>
-      <Tabs>
+      <Tabs defaultActiveKey="Domestic" onSelect={(k) => setActiveTab(k)}>
         <Tab eventKey="Domestic" title="国内">
           <Row>
             <Col>
               <ProvinceCitySelector
-                setProvince={setProvince}
-                setCity={setCity}
+                setProvince={(value) => setDomesticAddress(prev => ({ ...prev, province: value }))}
+                setCity={(value) => setDomesticAddress(prev => ({ ...prev, city: value }))}
               />
             </Col>
             <Col>
@@ -38,10 +64,7 @@ function Address_Table({title , setProvince, setCity, setDetailedAddress, setIsA
                 <Form.Label>详细地址</Form.Label>
                 <Form.Control
                   placeholder="XX区XX街道..."
-                  onChange={(e) => {
-                    setDetailedAddress(e.target.value);
-                    setIsAbroad(false);
-                  }}
+                  onChange={(e) => setDomesticAddress(prev => ({ ...prev, detailedAddress: e.target.value }))}
                 />
               </Form.Group>
             </Col>
@@ -50,7 +73,7 @@ function Address_Table({title , setProvince, setCity, setDetailedAddress, setIsA
                 <Form.Label>邮编</Form.Label>
                 <Form.Control
                   placeholder="123456"
-                  onChange={(e) => setZipcode(e.target.value)}
+                  onChange={(e) => setDomesticAddress(prev => ({ ...prev, zipcode: e.target.value }))}
                 />
               </Form.Group>
             </Col>
@@ -63,10 +86,7 @@ function Address_Table({title , setProvince, setCity, setDetailedAddress, setIsA
                 <Form.Label>详细地址</Form.Label>
                 <Form.Control
                   placeholder="XX区XX街道..."
-                  onChange={(e) => {
-                    setDetailedAddress(e.target.value);
-                    setIsAbroad(true);
-                  }}
+                  onChange={(e) => setForeignAddress(prev => ({ ...prev, detailedAddress: e.target.value }))}
                 />
               </Form.Group>
             </Col>
@@ -75,7 +95,7 @@ function Address_Table({title , setProvince, setCity, setDetailedAddress, setIsA
                 <Form.Label>邮编</Form.Label>
                 <Form.Control
                   placeholder="123456"
-                  onChange={(e) => setZipcode(e.target.value)}
+                  onChange={(e) => setForeignAddress(prev => ({ ...prev, zipcode: e.target.value }))}
                 />
               </Form.Group>
             </Col>
@@ -85,7 +105,7 @@ function Address_Table({title , setProvince, setCity, setDetailedAddress, setIsA
     </Container>
   );
 }
-
+export default Address_Table;
 
 /**
  * ProvinceCitySelector 组件用于选择省份和城市。
@@ -163,5 +183,3 @@ function ProvinceCitySelector({ setProvince, setCity }) {
       </Form>
   );
 }
-
-export default Address_Table;

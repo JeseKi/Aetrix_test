@@ -69,12 +69,12 @@ export default function PersonalInformation(props) {
         <Row>
           <Col>
             <Form.Group>
-              <Form.Label>上传你的个人图片</Form.Label>
+              <Form.Label>上传你的个人图片(不超过3mb)</Form.Label>
               <UploadFile setUploadFile={setPersonalPhoto} size_limit={3} fileTypes={["image/jpeg","image/png"]}/>
             </Form.Group>
           </Col>
         </Row>
-      <Address_Table title={"个人地址"} setCity={setPersonalCity} setProvince={setPersonalProvince} setDetailedAddress={setPersonalDetailedAddress} setAbroad={setIsPersonalAbroad} setZipcode={setPersonalZipcode}/>
+      <Address_Table title={"个人地址"} setCity={setPersonalCity} setProvince={setPersonalProvince} setDetailedAddress={setPersonalDetailedAddress} setIsAbroad={setIsPersonalAbroad} setZipcode={setPersonalZipcode}/>
       </Form>
     );
   };
