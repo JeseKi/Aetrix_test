@@ -241,7 +241,7 @@ async def tables_volunteersignup_initiate_submit(
     
     # 保存表单
     try:
-        db_user = user_crud.get_user(db, table.user_id)
+        db_user = await user_crud.get_user(db, table.user_id)
         volunteer_initiate_crud.create_volunteers_initiate(db, table, user=db_user)
     except Exception as e:
         print(e)
@@ -251,12 +251,12 @@ async def tables_volunteersignup_initiate_submit(
 # 根据用户ID获取所有志愿者发起人表格
 @app.get("/tables/volunteersignup/initiate/user/{user_id}")
 async def read_volunteer_initiates_by_user(user_id: int, db: Session = Depends(get_db)):
-    return volunteer_initiate_crud.get_volunteer_initiates_by_user_id(db, user_id)
+    return await volunteer_initiate_crud.get_volunteer_initiates_by_user_id(db, user_id)
 
 # 根据发起人ID获取特定志愿者发起人表格
 @app.get("/table/volunteersignup/initiate/{initiate_id}")
 async def read_volunteer_initiate(initiate_id: int, db: Session = Depends(get_db)):
-    volunteer_initiate = volunteer_initiate_crud.get_volunteer_initiate_by_id(db, initiate_id)
+    volunteer_initiate = await volunteer_initiate_crud.get_volunteer_initiate_by_id(db, initiate_id)
     if volunteer_initiate is None:
         raise HTTPException(status_code=404, detail="表单未找到")
     return volunteer_initiate
@@ -265,7 +265,7 @@ async def read_volunteer_initiate(initiate_id: int, db: Session = Depends(get_db
 @app.delete("/table/volunteersignup/initiate/{initiate_id}")
 async def delete_volunteers_initiate(initiate_id: int, db: Session = Depends(get_db)):
     try:
-        volunteer_initiate_crud.delete_volunteers_initiate(db, initiate_id)
+        await volunteer_initiate_crud.delete_volunteers_initiate(db, initiate_id)
         return {"message": "表单已删除"}
     except:
         return {"message": "表单删除失败"}
@@ -274,31 +274,34 @@ async def delete_volunteers_initiate(initiate_id: int, db: Session = Depends(get
 async def tables_volunteersignup_signup_submit(
     user_id: int = 1,
     # 个人信息
-    fullName: str = '' ,
-    gender: str = None ,
-    birthdate: str = '' ,
-    phone: str = '',
+    fullName: str = Form(...) ,
+    gender: str = Form(...) ,
+    birthdate: str = Form(...) ,
+    phone: str = Form(...),
     personalPhoto: UploadFile = None,
-    personalProvince: str = '',
-    personalCity: str = '',
-    personalDetailedAddress: str = '',
+    personalProvince: str = Form(...),
+    personalCity: str = Form(...),
+    personalDetailedAddress: str = Form(...),
     isPersonalAbroad: bool = False,
-    personalZipcode: str = '',
+    personalZipcode: str = Form(...),
 
     # 其他信息
-    CategorySelect: str = '',
+    CategorySelect: str = Form(...),
     executionPlan: UploadFile = None,
     resume: UploadFile = None,
-    wechat: str = '',
-    volunteerDescription: str = '',
-    volunteerTasks: str = '',
-    personalExpectations: str = '',
-    interviewAppointment: bool = False,
-    onlineInterviewAcceptance: bool = False,
-    communityWorkForm: str = '',
+    wechat: str = Form(...),
+    volunteerDescription: str = Form(...),
+    volunteerTasks: str = Form(...),
+    personalExpectations: str = Form(...),
+    interviewAppointment: bool = Form(...),
+    onlineInterviewAcceptance: bool = Form(...),
+    communityWorkForm: str = Form(...),
     
     db: Session = Depends(get_db)
 ):
+    # 测试阶段
+    utils.on_test("上传志愿者报名表格")
+    
     table = VolunteersSignUp(
         user_id=user_id,
         fullName=fullName,
@@ -336,11 +339,37 @@ async def tables_volunteersignup_signup_submit(
     
     try:
         user = user_crud.get_user(db, table.user_id)
-        volunteer_signup_crud.create_volunteers_sign_up(db=db, sign_up_data=table, user=user)
+        await volunteer_signup_crud.create_volunteers_sign_up(db=db, sign_up_data=table, user=user)
     except Exception as e:
         print(e)
         raise HTTPException(status_code=400, detail="表单提交失败")
     return {"message": "表格已成功提交"}
+
+# 根据用户ID获取所有志愿者报名人表格
+@app.get("/tables/volunteersignup/signup/user/{user_id}")
+async def read_volunteer_signup_by_user(user_id: int, db: Session = Depends(get_db)):
+    table_list = await volunteer_signup_crud.get_volunteers_sign_up_by_user_id(db, user_id)
+    if table_list != []:
+        return table_list
+    else:
+        raise HTTPException(status_code=200, detail="该用户未报名任何志愿者")
+    
+# 根据表格ID获取特定志愿者报名人表格
+@app.get("/table/volunteersignup/signup/{signup_id}")
+async def read_volunteer_signup(signup_id: int, db: Session = Depends(get_db)):
+    volunteer_signup = await volunteer_signup_crud.get_volunteers_sign_up_by_id(db, signup_id)
+    if volunteer_signup is None:
+        raise HTTPException(status_code=404, detail="表单未找到")
+    return volunteer_signup
+
+# 删除特定志愿者报名表格
+@app.delete("/table/volunteersignup/signup/{signup_id}")
+async def delete_volunteers_sign_up(signup_id: int, db: Session = Depends(get_db)):
+    try:
+        await volunteer_signup_crud.delete_volunteers_sign_up(db, signup_id)
+        return {"message": "表单已删除"}
+    except:
+        return {"message": "表单删除失败"}
 
 # 返回爬虫协议
 @app.get("/robot{path}")
