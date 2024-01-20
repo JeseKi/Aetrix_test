@@ -29,10 +29,15 @@ export default function Login () {
             return response.json()
         })
         .then(data =>{
-            if (data.id) {
-                navigate(`../infor/${data.id}`)
+            if (data.token) {
+                // 保存Token到localStorage
+                localStorage.setItem('token', data.token);
+                console.log("token:", data.token)
+        
+                // 导航到用户信息页面
+                navigate(`../infor/${data.id}`);
             }
-        })
+        })        
     };
     
     return (

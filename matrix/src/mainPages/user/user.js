@@ -1,5 +1,5 @@
-import React, { useEffect, useState , useRef} from "react";
-import {Routes , Route, useParams} from "react-router-dom"
+import React, { useEffect, useState } from "react";
+import {Routes , Route , useNavigate , useParams } from "react-router-dom"
 import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
 
 import AetrixNavBar from "../navbar";
@@ -25,6 +25,7 @@ export default function User () {
 function UserInfor() {
     // 使用 useState 创建 userInfor 状态，并初始化为 null
     const [userInfor, setUserInfor] = useState(null);
+    const localUserID = localStorage.getItem('userID');
 
     // 使用 useState 创建用户信息的各个状态，并初始化为空字符
     const [username, setUsername] = useState('');
@@ -37,22 +38,28 @@ function UserInfor() {
     // 处理上传的图片文件
     const [file, setFile] = useState(null);
 
-    // 从 URL 参数中提取 userID，用 useParams() 钩子
-    const { userID } = useParams();
+    // 重定向
+    const navigate = useNavigate();
 
+    // 从 URL 参数中提取 userID，用 useParams() 钩子
+    const { currentUserID } = useParams();
+
+    // token
+    const token = localStorage.getItem('token');
     // 使用 useEffect 发送 HTTP 请求，获取用户信息
     useEffect(() => {
-        // 发送 GET 请求获取用户信息
-        fetch(`http://127.0.0.1:8000/users/crud/${userID}`)
-            .then(response => response.json()) // 解析响应为 JSON
-            .then(data => setUserInfor(data)) // 更新 userInfor 状态
-            .catch(error => console.error('Error', error)); // 处理错误
-
+        if (!token) {
+            navigate('../login');
+        }
+        else {
+            fetchUserData();
+        }
     }, []);
 
     // 显示信息
     useEffect(() => {
         if (userInfor) {
+            console.log(userInfor)
             setUsername(userInfor.username || '');
             setEmail(userInfor.email || '');
             // 注意：通常不应从API直接获取密码字段
@@ -68,7 +75,7 @@ function UserInfor() {
         const formData = new FormData();
     
         // 添加字符串类型的数据
-        formData.append('user_id',userID)
+        formData.append('user_id',localUserID)
         formData.append('username', username);
         formData.append('email', email);
         formData.append('password', password);  // 考虑安全性，通常密码不应该这样传输
@@ -83,7 +90,7 @@ function UserInfor() {
         }
     
         // 发送PUT请求到后端
-        fetch(`http://127.0.0.1:8000/users/crud/${userID}`, {
+        fetch(`http://127.0.0.1:8000/users/crud/${localUserID}`, {
             method: 'PUT',
             body: formData
         })
@@ -100,6 +107,37 @@ function UserInfor() {
         .catch(error => console.error('Error:', error)); // 处理错误
     }
 
+    const fetchUserData = async () => {
+        if (token) {
+            try {
+                const response = await fetch('http://127.0.0.1:8000/verify-token', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (response.ok) {
+                    const tokenInfo = await response.json();
+                    localStorage.setItem("userID", tokenInfo.id)
+                } else {
+                    navigate("../login");
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        }
+    };
+    // 获取用户信息，并在用户ID不正确时重定向到正确的页面
+    useEffect(() => {
+        if (localUserID) {
+            fetch(`http://127.0.0.1:8000/users/crud/${localUserID}`)
+            .then(response => response.json())
+            .then(data => setUserInfor(data))
+            .catch(error => console.error('Error', error));
+        }
+        if (currentUserID != localUserID) {
+            navigate(`../infor/${localUserID}`)
+        }
+    }, [localUserID]);
     // 渲染用户信息表单
     return (
         <Container className="userInforContainer">

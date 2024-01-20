@@ -1,7 +1,8 @@
 ###### 第三方库 ######
 from fastapi import FastAPI, Depends, HTTPException , File , UploadFile , Form , status
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse , Response
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 import os
@@ -24,7 +25,11 @@ from request_body_schema.volunteer_sign_up import VolunteersInitiate , Volunteer
 
 ###### 工具包 ######
 from utils import Utils
+from utils.auth import Auth
+# 常用工具
 utils = Utils()
+# 鉴权工具
+auth = Auth()
 
 ###### APP ######
 app = FastAPI()
@@ -136,12 +141,22 @@ async def login_user(infor: UserLogin, db: Session = Depends(get_db)):
 
     # 验证密码
     if user.password == infor.password:
+        token = auth.create_access_token(data={"user_id": user.id})
+        # 日志
+        utils.event_time_log(f"生成token:{token}")
         return {
             "id" : user.id,
             "detail" : "登录成功",
+            "token" : token
         }
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="邮箱或密码错误")
+    
+# 根据token获取用户信息    
+@app.get("/verify-token")
+async def verify_user_token(response: Response, token_info: dict = Depends(auth.verify_token)):
+    # 这里token_info已经包含了user_id和新的Token
+    return token_info
 
 # 提交志愿者发起人表格
 @app.put("/tables/volunteersignup/initiate/submit")
