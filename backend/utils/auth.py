@@ -31,7 +31,7 @@ class Auth():
             headers={"WWW-Authenticate": "Bearer"},
         )  # 准备一个401未授权的异常
         # 日志
-        utils.event_time_log(f"获得Token：{token}", True)
+        # utils.event_time_log(f"获得Token：{token}", True)
         try:
             # 尝试解码JWT Token
             payload = jwt.decode(token, self.SECRET_KEY, algorithms=[self.ALGORITHM])

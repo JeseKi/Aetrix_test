@@ -143,7 +143,7 @@ async def login_user(infor: UserLogin, db: Session = Depends(get_db)):
     if user.password == infor.password:
         token = auth.create_access_token(data={"user_id": user.id})
         # 日志
-        utils.event_time_log(f"生成token:{token}")
+        # utils.event_time_log(f"生成token:{token}")
         return {
             "id" : user.id,
             "detail" : "登录成功",

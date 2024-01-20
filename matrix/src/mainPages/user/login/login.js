@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import Form from "react-bootstrap/Form"
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Button  from "react-bootstrap/Button"
@@ -10,8 +10,20 @@ import "./login.css"
 export default function Login () {
     const [email , setEmail] = useState('');
     const [password , setPassword] = useState('');
+    const userID = localStorage.getItem('userID');
+    const token = localStorage.getItem('token');
 
     const navigate = useNavigate()
+
+    useEffect(() => {
+        const userID = localStorage.getItem('userID');
+        const token = localStorage.getItem('token');
+
+        if (userID && token) {
+            // 如果已登录，重定向到信息页面
+            navigate(`../infor/${userID}`);
+        }
+    }, [navigate]); // 添加navigate作为依赖
 
     const userData = {
         email: email,
@@ -32,7 +44,8 @@ export default function Login () {
             if (data.token) {
                 // 保存Token到localStorage
                 localStorage.setItem('token', data.token);
-                console.log("token:", data.token)
+                localStorage.setItem('userID', data.user_id);
+                // console.log("token:", data.token)
         
                 // 导航到用户信息页面
                 navigate(`../infor/${data.id}`);

@@ -46,6 +46,27 @@ function UserInfor() {
 
     // token
     const token = localStorage.getItem('token');
+
+    const fetchUserData = async () => {
+        if (token) {
+            try {
+                const response = await fetch('http://127.0.0.1:8000/verify-token', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (response.ok) {
+                    const tokenInfo = await response.json();
+                    localStorage.setItem("userID", tokenInfo.id)
+                } else {
+                    navigate("../login");
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        }
+    };
+
     // 使用 useEffect 发送 HTTP 请求，获取用户信息
     useEffect(() => {
         if (!token) {
@@ -54,7 +75,7 @@ function UserInfor() {
         else {
             fetchUserData();
         }
-    }, []);
+    }, [fetchUserData , navigate , token]);
 
     // 显示信息
     useEffect(() => {
@@ -107,25 +128,6 @@ function UserInfor() {
         .catch(error => console.error('Error:', error)); // 处理错误
     }
 
-    const fetchUserData = async () => {
-        if (token) {
-            try {
-                const response = await fetch('http://127.0.0.1:8000/verify-token', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                if (response.ok) {
-                    const tokenInfo = await response.json();
-                    localStorage.setItem("userID", tokenInfo.id)
-                } else {
-                    navigate("../login");
-                }
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-            }
-        }
-    };
     // 获取用户信息，并在用户ID不正确时重定向到正确的页面
     useEffect(() => {
         if (localUserID) {
@@ -134,21 +136,21 @@ function UserInfor() {
             .then(data => setUserInfor(data))
             .catch(error => console.error('Error', error));
         }
-        if (currentUserID != localUserID) {
+        if (currentUserID !== localUserID) {
             navigate(`../infor/${localUserID}`)
         }
-    }, [localUserID]);
+    }, [localUserID , navigate , currentUserID]);
     // 渲染用户信息表单
     return (
         <Container className="userInforContainer">
-            <img src={avatar} alt="头像" className="avatar"/>
+            <img src={"http://127.0.0.1:8000"+avatar} alt="头像" className="avatar"/>
             <Form.Control type="text" value={username} className="name" onChange={e => setUsername(e.target.value)}/>
             <Modal.Dialog>
                 <Modal.Body>
                     <Form>
                         <Row>
                             <Form.Label>更改头像?</Form.Label>
-                            <UplaodFile setImg={setFile} size_limit={3} fileTypes={['image/jpeg', 'image/png']}/>
+                            <UplaodFile setUploadFile={setFile} size_limit={3} fileTypes={['image/jpeg', 'image/png']}/>
                         </Row>
                         <Form.Group className="formMargin">
                             <Row>
