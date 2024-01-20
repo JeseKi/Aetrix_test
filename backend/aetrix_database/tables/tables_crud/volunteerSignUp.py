@@ -91,6 +91,7 @@ class VolunteersSignUpCreate(BaseModel):
     birthdate: str = ''
     phone: str = ''
     personalPhoto: Optional[str] = None
+    personalPhoto_path: Optional[str] = None
     personalProvince: str = ''
     personalCity: str = ''
     personalDetailedAddress: str = ''
@@ -98,7 +99,9 @@ class VolunteersSignUpCreate(BaseModel):
     personalZipcode: str = ''
     CategorySelect: str = ''
     executionPlan: str = ''
+    executionPlanPath: str = ''
     resume: str = ''
+    resume_path: str = ''
     wechat: str = ''
     volunteerDescription: str = ''
     volunteerTasks: str = ''

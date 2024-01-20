@@ -50,10 +50,11 @@ class VolunteersSignUp(BaseModel):
     user_id: Optional[int] = 1
     # 个人信息
     fullName: str = ''
-    gender: str = None
+    gender: Optional[str] = None
     birthdate: str = ''
     phone: str = ''
     personalPhoto: Optional[str] = None
+    personalPhotoPath: Optional[str] = None
     personalProvince: str = ''
     personalCity: str = ''
     personalDetailedAddress: str = ''
@@ -63,7 +64,9 @@ class VolunteersSignUp(BaseModel):
     # 其他信息
     CategorySelect: str = ''
     executionPlan: str = ''
+    executionPlanPath: Optional[str] = None
     resume: str = ''
+    resumePath : Optional[str] = None
     wechat: str = ''
     volunteerDescription: str = ''
     volunteerTasks: str = ''

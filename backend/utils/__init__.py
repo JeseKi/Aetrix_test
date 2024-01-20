@@ -25,14 +25,17 @@ class Utils():
         file_name = f"{user_id}_{uuid4()}{file_extension}"
 
         # 拼接完整的文件路径
-        file_path = f"{path}/{file_name}"
+        file_path = os.path.join(path, file_name)
 
         # 将上传的文件写入服务器文件系统
-        with open(file_path, "wb") as file:
-            file.write(file.file.read())
+        with open(file_path, "wb") as file_out:
+            file_out.write(file.file.read())
+
+        # 构建静态文件访问路径
+        static_file_path = os.path.join(static_path, file_name)
 
         # 返回文件两个路径
-        return [static_path + file_name , file_path]
+        return [static_file_path, file_path]
     
     def event_time_log(self, event:str, isdatatime: bool = True):
         """

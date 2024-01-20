@@ -74,10 +74,7 @@ export default function VolunteerSignUpTable() {
       { value: wechat, name: "微信" },
       { value: volunteerDescription, name: "志愿者简述" },
       { value: volunteerTasks, name: "志愿者任务" },
-      { value: personalExpectations, name: "个人期望发展需求" },
-      { value: interviewAppointment, name: "线下面谈期望(需提前预约)" },
-      { value: onlineInterviewAcceptance, name: "是否接受线上面试" },
-      { value: communityWorkForm, name: "社区成员工作形态" }
+      { value: personalExpectations, name: "个人期望发展需求" }
     ];
   
     let hasEmptyFields = false;

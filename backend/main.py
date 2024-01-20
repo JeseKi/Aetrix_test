@@ -8,17 +8,19 @@ import os
 
 ###### 数据库包 ######
 # CRUD操作
+## 用户CRUD
 import aetrix_database.user_crud as user_crud
-
+## 表格CRUD
 import aetrix_database.tables.tables_crud.volunteerSignUp as volunteer_crud
 volunteer_initiate_crud = volunteer_crud.VolunteersInitiateCRUD()
+volunteer_signup_crud = volunteer_crud.VolunteersSignUpCRUD()
 
 # 数据库模型
 from aetrix_database.models import SessionLocal , User 
 
 ###### 请求体包 ######
 from request_body_schema.user import UserCreate, UserLogin
-from request_body_schema.volunteer_sign_up import VolunteersInitiate
+from request_body_schema.volunteer_sign_up import VolunteersInitiate , VolunteersSignUp
 
 ###### 工具包 ######
 from utils import Utils
@@ -26,7 +28,8 @@ utils = Utils()
 
 ###### APP ######
 app = FastAPI()
-app.mount("/users/avatars/", StaticFiles(directory="aetrix_database/imgs/userAvatars"), name="avatars")
+app.mount("/users/avatars", StaticFiles(directory="aetrix_database/files"), name="avatars")
+app.mount("/files", StaticFiles(directory="aetrix_database/files"), name="files")
 app.mount("/imgs", StaticFiles(directory="build/imgs"), name="imgs")
 app.mount("/static",StaticFiles(directory="build/static"), name="static")
 
@@ -94,7 +97,7 @@ async def update_user(
         bio=bio
     )
     if avatar:
-        avatar_path = utils.save_file(file=avatar, user_id=user_id, path="aetrix_database/imgs/userAvatars" , static_path='/users/avatars/')
+        avatar_path = utils.save_file(file=avatar, user_id=user_id, path="aetrix_database/files" , static_path='/users/avatars/')
         query_result = db.query(User).filter(User.id == user_id).first()
         try:
             if query_result and os.path.isfile(query_result.avatar_path):
@@ -229,12 +232,12 @@ async def tables_volunteersignup_initiate_submit(
     )
     
     # 在这里加入个人图片的处理
-    img_path = utils.save_file(file=personalPhoto, user_id=114514 , path="aetrix_database/imgs/aboutTables/volunteersSignUp/initiate" , static_path='/tables/imgs/')
+    img_path = utils.save_file(file=personalPhoto, user_id=114514 , path="aetrix_database/files" , static_path='/files')
     static_path , file_path = img_path[0] , img_path[1]
     table.personalPhoto , table.personalPhotoPath= static_path , file_path
     # 测试
-    for i in table:
-        print(i)
+    # for i in table:
+    #     print(i)
     
     # 保存表单
     try:
@@ -266,6 +269,78 @@ async def delete_volunteers_initiate(initiate_id: int, db: Session = Depends(get
         return {"message": "表单已删除"}
     except:
         return {"message": "表单删除失败"}
+    
+@app.put("/tables/volunteersignup/signup/submit")
+async def tables_volunteersignup_signup_submit(
+    user_id: int = 1,
+    # 个人信息
+    fullName: str = '' ,
+    gender: str = None ,
+    birthdate: str = '' ,
+    phone: str = '',
+    personalPhoto: UploadFile = None,
+    personalProvince: str = '',
+    personalCity: str = '',
+    personalDetailedAddress: str = '',
+    isPersonalAbroad: bool = False,
+    personalZipcode: str = '',
+
+    # 其他信息
+    CategorySelect: str = '',
+    executionPlan: UploadFile = None,
+    resume: UploadFile = None,
+    wechat: str = '',
+    volunteerDescription: str = '',
+    volunteerTasks: str = '',
+    personalExpectations: str = '',
+    interviewAppointment: bool = False,
+    onlineInterviewAcceptance: bool = False,
+    communityWorkForm: str = '',
+    
+    db: Session = Depends(get_db)
+):
+    table = VolunteersSignUp(
+        user_id=user_id,
+        fullName=fullName,
+        gender=gender,
+        birthdate=birthdate,
+        phone=phone,
+        # personalPhoto=personalPhoto,
+        personalProvince=personalProvince,
+        personalCity=personalCity,
+        personalDetailedAddress=personalDetailedAddress,
+        isPersonalAbroad=isPersonalAbroad,
+        personalZipcode=personalZipcode,
+        CategorySelect=CategorySelect,
+        # executionPlan=executionPlan,
+        # resume=resume,
+        wechat=wechat,
+        volunteerDescription=volunteerDescription,
+        volunteerTasks=volunteerTasks,
+        personalExpectations=personalExpectations,
+        interviewAppointment=interviewAppointment,
+        onlineInterviewAcceptance=onlineInterviewAcceptance,
+        communityWorkForm=communityWorkForm
+    )
+    photo = utils.save_file(file=personalPhoto, user_id=user_id, path="aetrix_database/files" , static_path='files')
+    execution_plan = utils.save_file(file=executionPlan, user_id=user_id, path="aetrix_database/files" , static_path='files')
+    resume_path = utils.save_file(file=resume, user_id=user_id, path="aetrix_database/files" , static_path='files')
+    
+    table.personalPhoto , table.personalPhotoPath= photo[0] , photo[1]
+    table.executionPlan , table.executionPlanPath= execution_plan[0] , execution_plan[1]
+    table.resume , table.resumePath= resume_path[0] , resume_path[1]
+    
+    # 测试
+    for i in table:
+        print(i)
+    
+    try:
+        user = user_crud.get_user(db, table.user_id)
+        volunteer_signup_crud.create_volunteers_sign_up(db=db, sign_up_data=table, user=user)
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=400, detail="表单提交失败")
+    return {"message": "表格已成功提交"}
 
 # 返回爬虫协议
 @app.get("/robot{path}")

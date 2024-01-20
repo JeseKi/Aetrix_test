@@ -23,8 +23,11 @@ class User(Base):
     avatar_path = Column(String) # 用户头像文件路径
     phone = Column(String, unique=True, index=True)  # 电话号码，唯一且可索引
     bio = Column(Text)  # 用户简介
-    # 定义与 VolunteersInitiateModel 的关系
+    # 已有的与志愿者发起人表格的关系
     volunteer_initiates = relationship("VolunteersInitiateModel", back_populates="user")
+
+    # 需要添加的与志愿者报名表格的关系
+    volunteers_sign_up = relationship("VolunteersSignUpModel", back_populates="user")
 
 # 用户相关的全部表格模型都继承自UserRelatedModel
 class UserRelatedModel(Base):
@@ -107,7 +110,9 @@ class VolunteersSignUpModel(UserRelatedModel):
     # 其他信息
     CategorySelect = Column(String, default='')
     executionPlan = Column(String, default='')
+    executionPlanPath = Column(String, default='')
     resume = Column(String, default='')
+    resumePath = Column(String, default='')
     wechat = Column(String, default='')
     volunteerDescription = Column(String, default='')
     volunteerTasks = Column(String, default='')
@@ -117,7 +122,7 @@ class VolunteersSignUpModel(UserRelatedModel):
     communityWorkForm = Column(String, default='')
 
     # 定义与User的关系
-    user = relationship("User", back_populates="volunteer_sign_ups")
+    user = relationship("User", back_populates="volunteers_sign_up")
     
 # 创建所有模型的数据库表
 Base.metadata.create_all(bind=engine)
