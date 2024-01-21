@@ -15,7 +15,7 @@ function TopHalf () {
 
     return (
     <div className="topHalf">
-        <AetrixNavBar src={"/imgs/mainPageImgs/LogoWithText.png"} textColor={"white"}/>
+        <AetrixNavBar src={"/imgs/mainPageImgs/LogoWithText.png"} textColor={"white"} isPublic={true}/>
         <p className="title">ÆTRIX</p>
         <div className="moduleEntrys">
             <a href="/modules/volunteer/volunteersignup">

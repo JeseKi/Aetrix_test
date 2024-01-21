@@ -12,7 +12,7 @@ export default function User () {
 
     return (
         <div>
-            <AetrixNavBar src={"/imgs/mainPageImgs/LogoWithText_black.svg"} textColor={"black"} />
+            <AetrixNavBar src={"/imgs/mainPageImgs/LogoWithText_black.svg"} textColor={"black"} isPublic={true}/>
             <Routes>
                 <Route path="infor/:userID" element={<UserInfor />} />
                 <Route path="login" element={<Login />} />

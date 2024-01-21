@@ -64,10 +64,10 @@ export default function Login () {
                         controlId="Email"
                         label="邮箱地址"
                     >
-                        <Form.Control type="email" placeholder="name@example.com" onChange={e => setEmail(e.target.value)}/>
+                        <Form.Control type="email" placeholder="name@example.com" onChange={e => setEmail(e.target.value)} style={{height:"5vh"}}/>
                     </FloatingLabel>
                     <FloatingLabel className="loginInput" controlId="Password" label="密码">
-                        <Form.Control type="password" placeholder="Password" onChange={e => setPassword(e.target.value)}/>
+                        <Form.Control type="password" placeholder="Password" onChange={e => setPassword(e.target.value)} style={{height:"5vh"}}/>
                     </FloatingLabel>
                     <Button className="loginSubmit" variant="primary" type="button" onClick={userLogin}>
                         登录

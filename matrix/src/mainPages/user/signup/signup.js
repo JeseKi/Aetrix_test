@@ -23,6 +23,11 @@ export default function SignUp () {
             bio: null
         };        
 
+        if (password !== confirmPassword){
+            alert("两次输入的密码不一致，请重新输入！");
+            return;
+        }
+
         // 发送POST请求到后端
         fetch('http://localhost:8000/users/crud/create', {
             method: 'POST',
@@ -54,7 +59,7 @@ export default function SignUp () {
                 <Form className="signUpInput">
                     {/* 输入用户名 */}
                     <FloatingLabel controlId="UserName" label="用户名">
-                        <Form.Control type="text" placeholder="" value={userName} onChange={(e) => setUserName(e.target.value)}/>
+                        <Form.Control type="text" placeholder="" value={userName} onChange={(e) => setUserName(e.target.value)} style={{height:"5vh"}}/>
                     </FloatingLabel>
 
                     {/* 输入邮箱地址 */}
@@ -63,25 +68,25 @@ export default function SignUp () {
                             type="email" 
                             placeholder="name@example.com" 
                             value={email} 
-                            style={{marginTop:"2vh"}}
+                            style={{marginTop:"2vh",height:"5vh"}}
                             onChange={(e) => setEmail(e.target.value)}/>
                     </FloatingLabel>
                     
                     {/* 输入密码 */}
                     <FloatingLabel controlId="Password" label="密码">
                         <Form.Control 
-                        type="password" 
+                        type="text" 
                         placeholder="Password" 
                         value={password} 
-                        style={{marginTop:"2vh"}}
+                        style={{marginTop:"2vh",height:"5vh"}}
                         onChange={(e) => setPassword(e.target.value)}/>
                     </FloatingLabel>
                     <FloatingLabel controlId="Password" label="确认密码">
                         <Form.Control 
-                            type="password" 
+                            type="text" 
                             placeholder="Password" 
                             value={confirmPassword} 
-                            style={{marginTop:"2vh" , marginBottom:"2vh"}}
+                            style={{marginTop:"2vh" , marginBottom:"2vh", height:"5vh"}}
                             onChange={(e) => setConfirmPassWord(e.target.value)}/>
                     </FloatingLabel>
 
@@ -90,7 +95,7 @@ export default function SignUp () {
                         <FloatingLabel controlId="GetVerificationCode" label="验证码">
                             <Form.Control 
                             type="text" 
-                            placeholder="验证码" 
+                            placeholder="验证码"
                             />
                         </FloatingLabel>
                         <InputGroup.Text className="verificationCode">

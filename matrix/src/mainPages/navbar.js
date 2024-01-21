@@ -1,11 +1,12 @@
 import React , {useState , useEffect} from "react";
+import {useNavigate} from "react-router-dom";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav"
 import Container from "react-bootstrap/Container";
 
 import "./navbar.css"
 
-export default function AetrixNavBar ({src , textColor , isPublic}) {
+export default function AetrixNavBar ({src , textColor , isPublic = false}) {
     // 使用 useState 创建 userInfor 状态，并初始化为 null
     const [userInfor, setUserInfor] = useState(null);
     const localUserID = localStorage.getItem('userID');
@@ -17,6 +18,9 @@ export default function AetrixNavBar ({src , textColor , isPublic}) {
     const [avatar, setAvatar] = useState('');
     const [phone, setPhone] = useState('');
     const [bio, setBio] = useState('');
+
+    // 重定向
+    const navigate = useNavigate();
 
     // token
     const token = localStorage.getItem('token');
@@ -55,6 +59,14 @@ export default function AetrixNavBar ({src , textColor , isPublic}) {
             } catch (error) {
                 localStorage.setItem("userID", null)
                 localStorage.setItem("token", null)
+                if (!isPublic) {
+                    navigate('/users/login');
+                }
+            }
+        }
+        else {
+            if (!isPublic) {
+                navigate('/users/login');
             }
         }
     };

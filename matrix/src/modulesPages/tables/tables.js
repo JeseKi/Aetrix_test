@@ -8,7 +8,7 @@ import AetrixNavBar from "../../mainPages/navbar"
 export default function Tables () {
     return (
             <div>
-                <AetrixNavBar src="/imgs/mainPageImgs/LogoWithText_black.svg" textColor="black"/>
+                <AetrixNavBar src="/imgs/mainPageImgs/LogoWithText_black.svg" textColor="black" isPublic={false}/>
                 <Routes>
                     <Route path="volunteerinitiate" element={<VolunteerInitiateTable />} />
                     <Route path="volunteersignup" element={<VolunteerSignUpTable />} />"
