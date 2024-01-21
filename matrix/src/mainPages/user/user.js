@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {Routes , Route , useNavigate , useParams } from "react-router-dom"
-import { Button, Col, Container, Form, InputGroup, Modal, Nav, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, InputGroup, Modal, Row } from "react-bootstrap";
 
 import AetrixNavBar from "../navbar";
 import Login from "./login/login";
@@ -167,7 +167,7 @@ function UserInfor() {
                                             type="email"
                                             value={email}
                                             onChange={e => setEmail(e.target.value)}
-                                            readOnly
+                                            disabled
                                             autoFocus
                                         />
                                     <Button onClick={() => navigate('../changemail')}>
@@ -187,7 +187,7 @@ function UserInfor() {
                     </Col>
                 </Row>
                 <Modal.Footer>
-                    <Button variant="secondary">
+                    <Button variant="secondary" onClick={() => navigate(-2)}>
                         关闭
                     </Button>
                     <Button variant="primary" className="buttonMargin" onClick={updateInfor}>

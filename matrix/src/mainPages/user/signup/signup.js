@@ -21,7 +21,7 @@ export default function SignUp () {
     
         // 开始发送验证码
         setSending(true);
-        fetch('http://localhost:8000/send-code/', {
+        fetch('http://127.0.0.1:8000/send-code/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -71,7 +71,7 @@ export default function SignUp () {
         }
     
         // 发送POST请求到后端
-        fetch('http://localhost:8000/users/crud/create', {
+        fetch('http://127.0.0.1:8000/users/crud/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

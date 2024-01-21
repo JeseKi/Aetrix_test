@@ -1,5 +1,6 @@
 import React , { useState } from "react";
-import { Col, Container, Form, Row , InputGroup, Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { Col, Container, Form, Row , InputGroup, Button , Modal} from "react-bootstrap";
 
 import "./changeMail.css";
 export default function ChangeMail() {
@@ -8,6 +9,7 @@ export default function ChangeMail() {
     const [timer, setTimer] = useState(60);  // 倒计时计数器
     const [sending, setSending] = useState(false);  // 是否正在发送验证码
     const [code, setCode] = useState("");  // 验证码
+    const navigate = useNavigate();
 
     // 发送验证码的函数
     const sendVerificationCode = () => {
@@ -15,7 +17,7 @@ export default function ChangeMail() {
     
         // 开始发送验证码
         setSending(true);
-        fetch('http://localhost:8000/send-code/', {
+        fetch('http://127.0.0.1:8000/send-code/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -43,10 +45,35 @@ export default function ChangeMail() {
             setSending(false);
         });
     };
+    
+    const clickChangeEmail = () => {
+        if (code === "") {
+            alert("请输入验证码");
+            return;
+        }
+        fetch('http://127.0.0.1:8000/users/update/email', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: newEmail, code: code })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Email changed:', data);
+            alert("电子邮箱地址已更改。");
+            localStorage.setItem("email", newEmail);
+            navigate(-1);
+         })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert("验证码错误或已过期，请重新获取验证码。");
+         });
+    };
 
     return (
         <Container className="changeMailContainer">
-            <h1>更改电子邮箱地址</h1>
+        <h1>更改电子邮箱地址</h1>
             <Container className="changeMailForm">
                 <Form>
                     <Row>
@@ -90,6 +117,14 @@ export default function ChangeMail() {
                         </Col>
                     </Row>
                 </Form>
+                <div style={{marginTop: "20px"}}>
+                    <Button variant="secondary" onClick={() => navigate(-1)}>
+                        关闭
+                    </Button>
+                    <Button variant="primary" className="buttonMargin" onClick={clickChangeEmail}>
+                        保存
+                    </Button>
+                </div>
             </Container>
         </Container>
     )
