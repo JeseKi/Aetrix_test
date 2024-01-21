@@ -17,10 +17,10 @@ class EmailVerificationService:
         password = 'juvixhdqpgqsdjid'  # 您的 QQ 邮箱授权码
         receiver = email  # 收件人邮箱地址
 
-        message = MIMEText(f'您的验证码是: {code}', 'plain', 'utf-8')
+        message = MIMEText(f'尊敬的用户，\n\n您好！\n\n感谢您使用ÆTRIX服务。您的验证码是: {code}。\n\n请在30分钟内使用此验证码完成验证。请注意，验证码在30分钟后将失效。\n\n如您未尝试进行操作，请忽略此邮件，并确保您的账户安全。\n\n如果您有任何疑问或需要帮助，请随时联系我们的客服团队。\n\n祝您使用愉快！\n\nÆTRIX团队', 'plain', 'utf-8')
         message['From'] = sender
         message['To'] = receiver
-        message['Subject'] = '验证码'
+        message['Subject'] = '【ÆTRIX】您的验证码'
 
         try:
             smtp_server = smtplib.SMTP_SSL('smtp.qq.com', 465)
@@ -40,10 +40,13 @@ class EmailVerificationService:
 
     def store_code(self, email: str, code: str):
         """存储验证码和更新发送时间"""
-        self.codes[email] = code
+        self.codes[email] = {'code': code, 'timestamp': datetime.now()}
         self.last_sent[email] = datetime.now()
 
     def verify_code(self, email: str, code: str):
-        """验证接收到的验证码"""
-        return self.codes.get(email) == code
-    
+        """验证接收到的验证码，同时检查是否过期"""
+        code_info = self.codes.get(email)
+        if code_info and code_info['code'] == code:
+            # 检查验证码是否在30分钟内
+            return datetime.now() - code_info['timestamp'] <= timedelta(minutes=30)
+        return False

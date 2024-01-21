@@ -33,6 +33,8 @@ router = APIRouter()
 async def create_user(user: UserCreate, db: Session = Depends(utils.get_db)):
     # 测试阶段
     utils.on_test("注册功能")
+    # 日志
+    # utils.event_time_log(f"获得验证码：{user.code} 验证码的类型为 {type(user.code)}")
     if email_verification_service.verify_code(user.email, user.code):
         existing_user = db.query(User).filter(User.email == user.email).first()
         if existing_user:

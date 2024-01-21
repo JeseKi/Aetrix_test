@@ -49,23 +49,27 @@ export default function SignUp () {
         });
     };
     
-    function clickSignUp () {
+    function clickSignUp() {
         // 创建要发送的数据对象
         const userData = {
             username: userName,
             email: email,
             password: password,
-            code: code,
+            code: code.toString(),  // 将验证码转换为字符串
             avatar: null,
             phone: null,
             bio: null
-        };        
-
-        if (password !== confirmPassword){
+        };
+    
+        if (password !== confirmPassword) {
             alert("两次输入的密码不一致，请重新输入！");
             return;
         }
-
+        if (code === "") {
+            alert("请输入验证码！");
+            return;
+        }
+    
         // 发送POST请求到后端
         fetch('http://localhost:8000/users/crud/create', {
             method: 'POST',
@@ -74,19 +78,17 @@ export default function SignUp () {
             },
             body: JSON.stringify(userData)
         })
-        .then(response => {
-                return response.json()
-            })
+        .then(response => response.json())
         .then(data => {
             console.log('Success:', data);
-            if (data.id){
-                navigate(`../infor/${data.id}`)
+            if (data.id) {
+                navigate(`../infor/${data.id}`);
             }
         })
         .catch((error) => {
             console.error('Error:', error);
         });
-    }
+    }    
 
     return (
         <div>
