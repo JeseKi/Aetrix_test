@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import {Routes , Route , useNavigate , useParams } from "react-router-dom"
-import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, InputGroup, Modal, Nav, Row } from "react-bootstrap";
 
 import AetrixNavBar from "../navbar";
 import Login from "./login/login";
 import SignUp from "./signup/signup";
+import ChangeMail from "./changeInfor/changeMail";
 import "./user.css"
 import UplaodFile from "../../modulesPages/tables/compoents/upload_file";
 
@@ -14,6 +15,7 @@ export default function User () {
         <div>
             <AetrixNavBar src={"/imgs/mainPageImgs/LogoWithText_black.svg"} textColor={"black"} isPublic={true}/>
             <Routes>
+                <Route path="changemail" element={<ChangeMail />} />
                 <Route path="infor/:userID" element={<UserInfor />} />
                 <Route path="login" element={<Login />} />
                 <Route path="signup" element={<SignUp />} />
@@ -30,9 +32,8 @@ function UserInfor() {
     // 使用 useState 创建用户信息的各个状态，并初始化为空字符
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    localStorage.setItem("email", email)
     const [avatar, setAvatar] = useState('');
-    const [phone, setPhone] = useState('');
     const [bio, setBio] = useState('');
 
     // 处理上传的图片文件
@@ -84,8 +85,6 @@ function UserInfor() {
             setUsername(userInfor.username || '');
             setEmail(userInfor.email || '');
             // 注意：通常不应从API直接获取密码字段
-            setPassword(userInfor.password || ''); 
-            setPhone(userInfor.phone || '');
             setBio(userInfor.bio || '');
             setAvatar(userInfor.avatar || '')
         }
@@ -98,9 +97,6 @@ function UserInfor() {
         // 添加字符串类型的数据
         formData.append('user_id',localUserID)
         formData.append('username', username);
-        formData.append('email', email);
-        formData.append('password', password);  // 考虑安全性，通常密码不应该这样传输
-        formData.append('phone', phone);
         formData.append('bio', bio);
     
         // 添加文件类型的数据
@@ -166,19 +162,18 @@ function UserInfor() {
                             <Row>
                                 <Col>
                                     <Form.Label>邮件地址</Form.Label>
-                                    <Form.Control
-                                        type="email"
-                                        value={email}
-                                        onChange={e => setEmail(e.target.value)}
-                                        autoFocus
-                                    />
-                                </Col>
-                                <Col>
-                                    <Form.Label>电话号码</Form.Label>
-                                    <Form.Control
-                                        value={phone}
-                                        onChange={e=> setPhone(e.target.value)}
-                                    />
+                                    <InputGroup>
+                                        <Form.Control
+                                            type="email"
+                                            value={email}
+                                            onChange={e => setEmail(e.target.value)}
+                                            readOnly
+                                            autoFocus
+                                        />
+                                    <Button onClick={() => navigate('../changemail')}>
+                                        更改邮件地址
+                                    </Button>
+                                    </InputGroup>
                                 </Col>
                             </Row>
                         </Form.Group>

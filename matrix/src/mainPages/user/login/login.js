@@ -16,8 +16,6 @@ export default function Login () {
     const navigate = useNavigate()
 
     useEffect(() => {
-        const userID = localStorage.getItem('userID');
-        const token = localStorage.getItem('token');
 
         if (userID && token) {
             // 如果已登录，重定向到信息页面

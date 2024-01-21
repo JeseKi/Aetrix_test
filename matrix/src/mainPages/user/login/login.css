@@ -8,7 +8,7 @@
 }
 .loginForm{
     width: 19.1vw;
-    height: 30.6vh;
+    min-height: 30.6vh;
     box-shadow: 3px 3px 10px #AAAAAA;
     border-radius: 6.2%;
     display: flex;

@@ -59,6 +59,7 @@ export default function AetrixNavBar ({src , textColor , isPublic = false}) {
             } catch (error) {
                 localStorage.setItem("userID", null)
                 localStorage.setItem("token", null)
+                localStorage.setItem("email", null)
                 if (!isPublic) {
                     navigate('/users/login');
                 }

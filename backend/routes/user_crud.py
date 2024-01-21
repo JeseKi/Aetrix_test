@@ -16,7 +16,7 @@ volunteer_signup_crud = volunteer_crud.VolunteersSignUpCRUD()
 from aetrix_database.models import  User 
 
 ###### 请求体包 ######
-from request_body_schema.user import UserCreate
+from request_body_schema.user import UserCreate , EmailUpdate
 
 ###### 工具包 ######
 from utils import Utils
@@ -63,8 +63,6 @@ async def read_user(user_id: int, db: Session = Depends(utils.get_db)):
 async def update_user(
     user_id: int, 
     username: str = Form(None), 
-    email: str = Form(None), 
-    password: str = Form(None), 
     phone: str = Form(None), 
     bio: str = Form(None), 
     avatar: UploadFile = File(None),
@@ -73,8 +71,8 @@ async def update_user(
     
     user = UserCreate(
         username=username,
-        email=email,
-        password=password,
+        email="update@example.com",
+        password=None,
         phone=phone,
         bio=bio
     )
@@ -102,3 +100,16 @@ async def update_user(
 async def delete_user(user_id: int, db: Session = Depends(utils.get_db)):
     user_crud.delete_user(db, user_id)
     return {"detail": "用户已删除"}  # 返回用户已删除的消息
+
+# 更新用户邮件地址
+@router.post("/users/update/email")
+async def update_email(email_update: EmailUpdate, db: Session = Depends(utils.get_db)):
+    # 验证邮箱和验证码
+    if not email_verification_service.verify_code(email_update.email, email_update.code):
+        raise HTTPException(status_code=400, detail="验证码错误或已过期")
+
+    updated_user = user_crud.update_user_email(db, email_update.id, email_update.email)
+    if updated_user:
+        return {"message": "邮箱更新成功"}
+    else:
+        raise HTTPException(status_code=404, detail="用户不存在")

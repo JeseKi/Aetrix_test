@@ -8,7 +8,7 @@
 }
 .signUpForm{
     width: 23vw;
-    height: 50vh;
+    min-height: 50vh;
     border-radius:6.2%;
     box-shadow: 3px 3px 10px #AAAAAA;
     text-align: center;

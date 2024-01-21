@@ -17,3 +17,8 @@ class UserLogin(BaseModel):
     
 class EmailRequest(BaseModel):
     email: EmailStr
+
+class EmailUpdate(BaseModel):
+    id: int
+    email: EmailStr
+    code: str

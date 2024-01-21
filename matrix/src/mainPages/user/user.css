@@ -16,7 +16,11 @@
     border: 1px dashed black;
     text-align: center;
 }
-
+.dangerArea{
+    color: white;
+    background-color: #bb2d3b;
+    width: 4vw;
+}
 .formMargin{
     margin-top: 1vh;
 }

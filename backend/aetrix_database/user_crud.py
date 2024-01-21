@@ -28,7 +28,8 @@ def update_user(db: Session, user_id: int, user: UserCreate):
     db_user = get_user(db, user_id)
     if db_user:
         db_user.username = user.username
-        db_user.email = user.email
+        if user.email != None and user.email != "" and user.email != "update@example.com":
+            db_user.email = user.email
         if user.password != None and user.password != "":
             db_user.password = user.password  # 同样，密码应该安全处理
         if user.avatar != None and user.avatar != "":
@@ -48,3 +49,13 @@ def delete_user(db: Session, user_id: int):
         db.delete(db_user)
         db.commit()
     return db_user
+
+def update_user_email(db: Session, user_id: int, new_email: str):
+    db_user = db.query(User).filter(User.id == user_id).first()
+    if db_user:
+        db_user.email = new_email
+        db.commit()
+        db.refresh(db_user)
+        return db_user
+    else:
+        return None  # 用户不存在
