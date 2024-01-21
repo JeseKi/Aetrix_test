@@ -64,7 +64,7 @@ export default function ChangeMail() {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ token: token , email: newEmail, code: code.toString() })
+            body: JSON.stringify({ email: newEmail, code: code.toString() })
         })
         .then(response => response.json())
         .then(data => {
@@ -132,7 +132,7 @@ export default function ChangeMail() {
                 </Form>
                 <div style={{marginTop: "20px"}}>
                     <Button variant="secondary" onClick={() => navigate(-1)}>
-                        关闭
+                        取消
                     </Button>
                     <Button variant="primary" className="buttonMargin" onClick={clickChangeEmail}>
                         保存

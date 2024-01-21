@@ -20,10 +20,12 @@ class Utils():
             static_path (str): 文件的静态文件路径前缀。
 
         Returns:
-            list: 文件的静态文件路径和文件路径。
+            list: 0: 静态文件路径，1: 服务器文件路径，2: 原始文件名。
         """
         # 获取文件扩展名
         file_extension = os.path.splitext(file.filename)[1]
+        # 获取原始文件名
+        origin_file_name = file.filename
 
         # 生成唯一的文件名，包括用户ID和随机UUID，并加上文件扩展名
         file_name = f"{user_id}_{uuid4()}{file_extension}"
@@ -38,8 +40,8 @@ class Utils():
         # 构建静态文件访问路径
         static_file_path = os.path.join(static_path, file_name)
 
-        # 返回文件两个路径
-        return [static_file_path, file_path]
+        # 返回文件两个路径和原始文件名
+        return [static_file_path, file_path , origin_file_name]
     
     def event_time_log(self, event:str, isdatatime: bool = True):
         """

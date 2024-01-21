@@ -6,6 +6,7 @@ import AetrixNavBar from "../navbar";
 import Login from "./login/login";
 import SignUp from "./signup/signup";
 import ChangeMail from "./changeInfor/changeMail";
+import ChangePassword from "./changeInfor/changePassword";
 import "./user.css"
 import UplaodFile from "../../modulesPages/tables/compoents/upload_file";
 
@@ -15,6 +16,7 @@ export default function User () {
         <div>
             <AetrixNavBar src={"/imgs/mainPageImgs/LogoWithText_black.svg"} textColor={"black"} isPublic={true}/>
             <Routes>
+                <Route path="changepassword" element={<ChangePassword/>} />
                 <Route path="changemail" element={<ChangeMail />} />
                 <Route path="infor/:userID" element={<UserInfor />} />
                 <Route path="login" element={<Login />} />
@@ -181,7 +183,7 @@ function UserInfor() {
                 </Modal.Body>
                 <Row>
                     <Col className="formMargin">
-                        <Button variant="danger">
+                        <Button variant="danger" onClick={() => navigate('../changepassword')}>
                             更改密码
                         </Button>
                     </Col>

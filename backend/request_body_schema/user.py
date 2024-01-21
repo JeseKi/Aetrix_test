@@ -19,11 +19,9 @@ class EmailRequest(BaseModel):
     email: EmailStr
 
 class EmailUpdate(BaseModel):
-    token: str
     email: EmailStr
     code: str
     
 class PasswordUpdate(BaseModel):
-    token: str
-    password: str
-    code: str
+    old_password: str
+    new_password: str

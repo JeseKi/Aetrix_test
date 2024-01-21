@@ -62,12 +62,16 @@ def update_user_email(db: Session, user_id: int, new_email: str):
         return None  # 用户不存在
 
 # 更新用户密码
-def update_user_password(db: Session, user_id: int, new_password: str):
+def update_user_password(db: Session, user_id: int, old_password:str ,new_password: str):
     db_user = db.query(User).filter(User.id == user_id).first()
     if db_user:
-        db_user.password = new_password  # 确保这里的密码是加密后的
-        db.commit()
-        db.refresh(db_user)
-        return db_user
+        if db_user.password == old_password:
+            db_user.password = new_password
+            db.commit()
+            db.refresh(db_user)
+            return db_user
+        else:
+            return False
+
     else:
         return None  # 用户不存在

@@ -1,59 +1,12 @@
 from sqlalchemy.orm import Session
-from pydantic import BaseModel
-from typing import Optional
 ###### 数据模型 ######
 from aetrix_database.models import VolunteersInitiateModel , VolunteersSignUpModel
 from aetrix_database.models import User
 
-class VolunteersInitiateCreate(BaseModel):
-    # 公司情报
-    companyName: str = ''
-    legalRepresentative: str = ''
-    establishmentDate: str = ''
-    capital: str = ''
-    totalEmployees: int = 0
-    maleEmployees: int = 0
-    femaleEmployees: int = 0
-    businessContent: str = ''
-    specialty: str = ''
-    companyProvince: str = ''
-    companyCity: str = ''
-    companyDetailedAddress: str = ''
-    isCompanyAbroad: bool = False
-    companyZipcode: str = ''
-
-    # 个人情报
-    fullName: str = ''
-    gender: str = None
-    birthdate: str = ''
-    phone: str = ''
-    personalPhoto: Optional[str] = None
-    personalPhotoPath: Optional[str] = None
-    personalProvince: str = ''
-    personalCity: str = ''
-    personalDetailedAddress: str = ''
-    isPersonalAbroad: bool = False
-    personalZipcode: str = ''
-
-    # 执行方案
-    recruiters: str = ''
-    requiredCount: int = 0
-    taskType: str = ''
-    educationRequirement: str = ''
-    personalIntroduction: str = ''
-    skills: str = ''
-    onlineOffline: bool = False
-    fullTimePartTime: bool = False
-    probationaryCompensation: bool = False
-
-    # 选择自组织种类
-    CategorySelect: str = ''
-
-    class Config:
-        from_attributes = True
+from request_body_schema.volunteer_sign_up import VolunteersInitiate , VolunteersSignUp
 
 class VolunteersInitiateCRUD():
-    async def create_volunteers_initiate(self,db: Session, volunteer_initiate_data: VolunteersInitiateCreate, user: User):
+    async def create_volunteers_initiate(self,db: Session, volunteer_initiate_data: VolunteersInitiate, user: User):
         # 使用 Pydantic 模型的 from_attributes 方法
         volunteer_initiate_dict = volunteer_initiate_data.dict(exclude_unset=True)
         volunteer_initiate = VolunteersInitiateModel(**volunteer_initiate_dict, user=user)
@@ -85,36 +38,8 @@ class VolunteersInitiateCRUD():
     async def get_volunteer_initiate_by_id(self, db: Session, initiate_id: int):
         return db.query(VolunteersInitiateModel).filter(VolunteersInitiateModel.id == initiate_id).first()
 
-class VolunteersSignUpCreate(BaseModel):
-    fullName: str = ''
-    gender: Optional[str] = None
-    birthdate: str = ''
-    phone: str = ''
-    personalPhoto: Optional[str] = None
-    personalPhoto_path: Optional[str] = None
-    personalProvince: str = ''
-    personalCity: str = ''
-    personalDetailedAddress: str = ''
-    isPersonalAbroad: bool = False
-    personalZipcode: str = ''
-    CategorySelect: str = ''
-    executionPlan: str = ''
-    executionPlanPath: str = ''
-    resume: str = ''
-    resume_path: str = ''
-    wechat: str = ''
-    volunteerDescription: str = ''
-    volunteerTasks: str = ''
-    personalExpectations: str = ''
-    interviewAppointment: bool = False
-    onlineInterviewAcceptance: bool = False
-    communityWorkForm: str = ''
-
-    class Config:
-        from_attributes = True
-
 class VolunteersSignUpCRUD():
-    async def create_volunteers_sign_up(self, db: Session, sign_up_data: VolunteersSignUpCreate, user: User):
+    async def create_volunteers_sign_up(self, db: Session, sign_up_data: VolunteersSignUp, user: User):
         sign_up_dict = sign_up_data.dict(exclude_unset=True)
         sign_up = VolunteersSignUpModel(**sign_up_dict, user=user)
         db.add(sign_up)

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Col, Form, InputGroup, Row, Container , Button} from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 import Address_Table from "../../tables/compoents/address_selector";
 import SelfOrganizedSelect from "../../tables/compoents/category_selector";
@@ -7,6 +8,7 @@ import UploadFile from "../../tables/compoents/upload_file";
 import "./volunteerInitiateTable.css";
 
 export default function VolunteerSignUpTable() {
+    const navigate = useNavigate();
     // token获取
     const token = localStorage.getItem('token');
     // 个人情报
@@ -105,7 +107,7 @@ export default function VolunteerSignUpTable() {
             if (response.ok) {
             console.log("Form submitted successfully");
             alert("提交成功");
-            // 处理响应
+            window.location.reload();
             } else {
             console.error("Form submission failed");
             alert("提交失败");
@@ -329,7 +331,7 @@ export default function VolunteerSignUpTable() {
             </Container>
             <Row>
                 <Col>
-                    <Button type="button" variant="danger" className="submitButton">取消</Button>
+                    <Button type="button" variant="danger" className="submitButton" onClick={() => navigate(-1)}>取消</Button>
                 </Col>
                 <Col>
                     <Button type="button" variant="primary" className="submitButton" onClick={submitVolunteerFormToBackend}>提交</Button>

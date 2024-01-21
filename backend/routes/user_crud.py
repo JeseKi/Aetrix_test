@@ -17,7 +17,7 @@ volunteer_signup_crud = volunteer_crud.VolunteersSignUpCRUD()
 from aetrix_database.models import  User 
 
 ###### 请求体包 ######
-from request_body_schema.user import UserCreate , EmailUpdate
+from request_body_schema.user import UserCreate , EmailUpdate , PasswordUpdate
 
 ###### 工具包 ######
 from server_utils import utils , auth , email_verification_service
@@ -120,3 +120,17 @@ async def update_email(email_update: EmailUpdate, db: Session = Depends(utils.ge
             raise HTTPException(status_code=404, detail="用户不存在")
     except IntegrityError:
         raise HTTPException(status_code=400, detail="邮箱已被其他用户使用")
+    
+# 更新用户密码
+@router.post("/users/update/password")
+async def update_password(password_update: PasswordUpdate, db: Session = Depends(utils.get_db), token_info: dict = Depends(auth.verify_token)):
+    user_id = token_info.get("user_id")
+
+    updated_user = user_crud.update_user_password(db, user_id, password_update.old_password, password_update.new_password)
+    if updated_user:
+        return {
+                "status": "success",
+                "message": "密码更新成功"
+                }
+    else:
+        raise HTTPException(status_code=400, detail="旧密码错误！")

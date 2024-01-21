@@ -2,7 +2,6 @@ from pydantic import BaseModel
 from typing import Optional
 
 class VolunteersInitiate(BaseModel):
-    user_id: Optional[int] = 1
     # 公司情报
     companyName: str = ''
     legalRepresentative: str = ''
@@ -25,6 +24,7 @@ class VolunteersInitiate(BaseModel):
     birthdate: str = ''
     phone: str = ''
     personalPhoto: Optional[str] = None
+    personalPhotoOriginalName : Optional[str] = None
     personalPhotoPath: Optional[str] = None
     personalProvince: str = ''
     personalCity: str = ''
@@ -45,15 +45,17 @@ class VolunteersInitiate(BaseModel):
 
     # 选择自组织种类
     CategorySelect: str = ''
+    class Config:
+        from_attributes = True
 
 class VolunteersSignUp(BaseModel):
-    user_id: Optional[int] = 1
     # 个人信息
     fullName: str = ''
-    gender: Optional[str] = None
+    gender: str = None
     birthdate: str = ''
     phone: str = ''
     personalPhoto: Optional[str] = None
+    personalPhotoOriginalName: Optional[str] = None
     personalPhotoPath: Optional[str] = None
     personalProvince: str = ''
     personalCity: str = ''
@@ -64,8 +66,10 @@ class VolunteersSignUp(BaseModel):
     # 其他信息
     CategorySelect: str = ''
     executionPlan: str = ''
+    executionPlanOriginalName: str = ''
     executionPlanPath: Optional[str] = None
     resume: str = ''
+    resumeOriginalName: str = ''
     resumePath : Optional[str] = None
     wechat: str = ''
     volunteerDescription: str = ''

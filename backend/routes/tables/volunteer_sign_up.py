@@ -110,8 +110,7 @@ async def tables_volunteersignup_initiate_submit(
     
     # 在这里加入个人图片的处理
     img_path = utils.save_file(file=personalPhoto, user_id=114514 , path="aetrix_database/files" , static_path='/files')
-    static_path , file_path = img_path[0] , img_path[1]
-    table.personalPhoto , table.personalPhotoPath= static_path , file_path
+    table.personalPhoto , table.personalPhotoPath, table.personalPhotoOriginalName = img_path[0] , img_path[1], img_path[2]
     # 测试
     # for i in table:
     #     print(i)
@@ -150,7 +149,6 @@ async def delete_volunteers_initiate(initiate_id: int, db: Session = Depends(uti
     
 @router.put("/tables/volunteersignup/signup/submit")
 async def tables_volunteersignup_signup_submit(
-    user_id: int = 1,
     # 个人信息
     fullName: str = Form(...) ,
     gender: str = Form(...) ,
@@ -181,6 +179,7 @@ async def tables_volunteersignup_signup_submit(
     # 测试阶段
     utils.on_test("上传志愿者报名表格")
     
+    user_id = token_info.get("user_id")
     table = VolunteersSignUp(
         user_id=user_id,
         fullName=fullName,
@@ -208,14 +207,13 @@ async def tables_volunteersignup_signup_submit(
     execution_plan = utils.save_file(file=executionPlan, user_id=user_id, path="aetrix_database/files" , static_path='files')
     resume_path = utils.save_file(file=resume, user_id=user_id, path="aetrix_database/files" , static_path='files')
     
-    table.personalPhoto , table.personalPhotoPath= photo[0] , photo[1]
-    table.executionPlan , table.executionPlanPath= execution_plan[0] , execution_plan[1]
-    table.resume , table.resumePath= resume_path[0] , resume_path[1]
+    table.personalPhoto , table.personalPhotoPath , table.personalPhotoOriginalName= photo[0] , photo[1] , photo[2]
+    table.executionPlan , table.executionPlanPath , table.executionPlanOriginalName= execution_plan[0] , execution_plan[1] , execution_plan[2]
+    table.resume , table.resumePath , table.resumeOriginalName= resume_path[0] , resume_path[1] , resume_path[2]
     
     # 测试
     # for i in table:
     #     print(i)
-    uer_id = token_info.get("user_id")
     try:
         user = user_crud.get_user(db, user_id)
         await volunteer_signup_crud.create_volunteers_sign_up(db=db, sign_up_data=table, user=user)

@@ -1,5 +1,6 @@
 import React , {useState} from "react";
 import { Button, Col, Container , Row,} from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 import CompanyIntelligence from "./compoents/company_intelligence";
 import PersonalInformation from "./compoents/personal_information";
@@ -7,6 +8,7 @@ import ExecutionPlan from "./compoents/execution_plan";
 import "./volunteerInitiateTable.css"
 
 export default function VolunteerInitiateTable () {
+    const navigate = useNavigate()
     // 公司情报
     const [companyName, setCompanyName] = useState(''); // 公司名称
     const [legalRepresentative, setLegalRepresentative] = useState(''); // 法定代表人姓名
@@ -266,7 +268,7 @@ export default function VolunteerInitiateTable () {
             </Container>
             <Row>
                 <Col>
-                    <Button type="button" variant="danger" className="submitButton">取消</Button>
+                    <Button type="button" variant="danger" className="submitButton" onClick={() => navigate(-1)}>取消</Button>
                 </Col>
                 <Col>
                     <Button type="button" variant="primary" className="submitButton" onClick={handleFormSubmit}>提交</Button>
