@@ -20,6 +20,9 @@ from request_body_schema.user import UserCreate
 
 ###### 工具包 ######
 from utils import Utils
+# 其他路由的实例
+from routes.email_routes import email_verification_service
+
 # 常用工具
 utils = Utils()
 
@@ -30,18 +33,20 @@ router = APIRouter()
 async def create_user(user: UserCreate, db: Session = Depends(utils.get_db)):
     # 测试阶段
     utils.on_test("注册功能")
-    
-    existing_user = db.query(User).filter(User.email == user.email).first()
-    if existing_user:
-        print("邮件已存在！")
-        raise HTTPException(status_code=400, detail="邮件已存在！")
-    existing_username = db.query(User).filter(User.username == user.username).first()
-    
-    if existing_username:
-        print("用户名已被占用！")
-        raise HTTPException(status_code=400, detail="用户名已被占用！")
-    user.avatar = "/users/avatars/default_avatar.png"
-    return user_crud.create_user(db=db, user=user)
+    if email_verification_service.verify_code(user.email, user.code):
+        existing_user = db.query(User).filter(User.email == user.email).first()
+        if existing_user:
+            print("邮件已存在！")
+            raise HTTPException(status_code=400, detail="邮件已存在！")
+        existing_username = db.query(User).filter(User.username == user.username).first()
+        
+        if existing_username:
+            print("用户名已被占用！")
+            raise HTTPException(status_code=400, detail="用户名已被占用！")
+        user.avatar = "/users/avatars/default_avatar.png"
+        return user_crud.create_user(db=db, user=user)
+    else:
+        raise HTTPException(status_code=400, detail="验证码错误！")
 
 # 获取特定用户的信息
 @router.get("/users/crud/{user_id}")

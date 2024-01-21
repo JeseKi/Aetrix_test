@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from pydantic import BaseModel, EmailStr
 import random
 import smtplib
 from email.mime.text import MIMEText

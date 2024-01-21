@@ -33,9 +33,12 @@ app.mount("/static",StaticFiles(directory="build/static"), name="static")
 
 # 子路由
 from routes.user_crud import router as user_router
+from routes.email_routes import router as email_verification_router
 from routes.tables.volunteer_sign_up import router as volunteer_sign_up_router
 app.include_router(user_router)
+app.include_router(email_verification_router)
 app.include_router(volunteer_sign_up_router)
+
 
 # 添加CORS中间件，以允许跨域资源共享
 app.add_middleware(

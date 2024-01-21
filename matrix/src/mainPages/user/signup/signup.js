@@ -11,13 +11,51 @@ export default function SignUp () {
     const [confirmPassword , setConfirmPassWord] = useState("");
 
     const navigate = useNavigate();
-
+    const [code, setCode] = useState("");  // 存储输入的验证码
+    const [sending, setSending] = useState(false);  // 是否正在发送验证码
+    const [timer, setTimer] = useState(60);  // 倒计时计数器
+    
+    // 发送验证码的函数
+    const sendVerificationCode = () => {
+        if (sending) return;
+    
+        // 开始发送验证码
+        setSending(true);
+        fetch('http://localhost:8000/send-code/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: email })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Verification code sent:', data);
+            // 开始倒计时
+            let countdown = 60;
+            const intervalId = setInterval(() => {
+                countdown -= 1;
+                setTimer(countdown);
+                if (countdown <= 0) {
+                    clearInterval(intervalId);
+                    setSending(false);
+                    setTimer(60);
+                }
+            }, 1000);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            setSending(false);
+        });
+    };
+    
     function clickSignUp () {
         // 创建要发送的数据对象
         const userData = {
             username: userName,
             email: email,
             password: password,
+            code: code,
             avatar: null,
             phone: null,
             bio: null
@@ -96,11 +134,16 @@ export default function SignUp () {
                             <Form.Control 
                             type="text" 
                             placeholder="验证码"
+                            value={code}
+                            onChange={(e) => setCode(e.target.value)}
                             />
                         </FloatingLabel>
                         <InputGroup.Text className="verificationCode">
-                            <Button style={{background:"none" , border:"none"}}>
-                                获取验证码
+                            <Button 
+                                onClick={sendVerificationCode} 
+                                disabled={sending}
+                                style={{background:"none" , border:"none"}}>
+                                {sending ? `${timer}秒后重发` : "获取验证码"}
                             </Button>
                         </InputGroup.Text>
                     </InputGroup>
