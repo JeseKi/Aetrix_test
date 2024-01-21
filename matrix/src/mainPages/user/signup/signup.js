@@ -1,5 +1,5 @@
 import {React , useState} from "react";
-import { Container, Row, Col, FloatingLabel, Form, Button, InputGroup } from 'react-bootstrap';
+import { Container, FloatingLabel, Form, Button, InputGroup } from 'react-bootstrap';
 import {NavLink , useNavigate} from "react-router-dom";
 
 import "./signup.css"

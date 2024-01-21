@@ -5,6 +5,9 @@ from uuid import uuid4
 from datetime import datetime 
 import time
 
+# 数据库连接
+from aetrix_database.models import SessionLocal
+
 class Utils():
     def save_file(self, file: UploadFile, user_id: int, path: str, static_path: str) -> list:
         """
@@ -56,3 +59,11 @@ class Utils():
         某功能未完成时，可以用此装饰器来标记，以便后续跟踪。
         """
         print(f"[WARNING][WARNING][WARNING]:【{function}】功能未完成，请注意！[WARNING][WARNING][WARNING]")
+        
+    # 创建一个函数以获取数据库会话
+    def get_db(self):
+        db = SessionLocal()
+        try:
+            yield db
+        finally:
+            db.close()
