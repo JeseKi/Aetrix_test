@@ -15,9 +15,7 @@ volunteer_signup_crud = volunteer_crud.VolunteersSignUpCRUD()
 from request_body_schema.volunteer_sign_up import VolunteersInitiate , VolunteersSignUp
 
 ###### 工具包 ######
-from utils import Utils
-# 常用工具
-utils = Utils()
+from server_utils import utils , auth
 
 router = APIRouter()
 
@@ -67,7 +65,8 @@ async def tables_volunteersignup_initiate_submit(
     CategorySelect: str = Form(...),  # 是否选择自组织种类
     
     # 数据库
-    db = Depends(utils.get_db)
+    db = Depends(utils.get_db),
+    token_info = Depends(auth.verify_token)
 ):
     # 测试阶段
     utils.on_test("上传自组织发起人表格")
@@ -118,6 +117,7 @@ async def tables_volunteersignup_initiate_submit(
     #     print(i)
     
     # 保存表单
+    user_id = token_info.get("user_id")
     try:
         db_user = await user_crud.get_user(db, table.user_id)
         volunteer_initiate_crud.create_volunteers_initiate(db, table, user=db_user)

@@ -19,6 +19,11 @@ class EmailRequest(BaseModel):
     email: EmailStr
 
 class EmailUpdate(BaseModel):
-    id: int
+    token: str
     email: EmailStr
+    code: str
+    
+class PasswordUpdate(BaseModel):
+    token: str
+    password: str
     code: str

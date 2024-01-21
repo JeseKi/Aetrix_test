@@ -4,8 +4,9 @@ from jose import jwt, JWTError
 from datetime import datetime, timedelta
 from typing import Optional
 
-from utils import Utils
-utils = Utils()
+from .utils import Utils
+
+_auth_utils = Utils()
 
 # 用于获取Token的路径
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -31,7 +32,7 @@ class Auth():
             headers={"WWW-Authenticate": "Bearer"},
         )  # 准备一个401未授权的异常
         # 日志
-        # utils.event_time_log(f"获得Token：{token}", True)
+        # _auth_utils.event_time_log(f"获得Token：{token}", True)
         try:
             # 尝试解码JWT Token
             payload = jwt.decode(token, self.SECRET_KEY, algorithms=[self.ALGORITHM])
@@ -47,7 +48,7 @@ class Auth():
             # 如果即将过期，则生成新的Token
             new_token = self.create_access_token(data={"user_id": user_id}, expires_delta=timedelta(days=3))
         return {
-            "id" : user_id,
+            "user_id" : user_id,
             "detail" : "token验证成功",
             "token" : new_token if new_token else token
         }

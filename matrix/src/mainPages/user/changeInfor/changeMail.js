@@ -1,6 +1,6 @@
 import React , { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Col, Container, Form, Row , InputGroup, Button , Modal} from "react-bootstrap";
+import { Col, Container, Form, Row , InputGroup, Button } from "react-bootstrap";
 
 import "./changeMail.css";
 export default function ChangeMail() {
@@ -10,6 +10,9 @@ export default function ChangeMail() {
     const [sending, setSending] = useState(false);  // 是否正在发送验证码
     const [code, setCode] = useState("");  // 验证码
     const navigate = useNavigate();
+
+    // 获取token
+    const token = localStorage.getItem("token");
 
     // 发送验证码的函数
     const sendVerificationCode = () => {
@@ -51,19 +54,29 @@ export default function ChangeMail() {
             alert("请输入验证码");
             return;
         }
+        if (newEmail === "") {
+            alert("请输入新电子邮箱地址");
+            return;
+        }
         fetch('http://127.0.0.1:8000/users/update/email', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ email: newEmail, code: code })
+            body: JSON.stringify({ token: token , email: newEmail, code: code.toString() })
         })
         .then(response => response.json())
         .then(data => {
+            if (data.status === "success"){
             console.log('Email changed:', data);
             alert("电子邮箱地址已更改。");
             localStorage.setItem("email", newEmail);
             navigate(-1);
+            }else{
+            console.log('Error:', data);
+            alert("验证码错误或已过期，请重新获取验证码。");
+            }
          })
         .catch((error) => {
             console.error('Error:', error);

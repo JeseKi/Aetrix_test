@@ -1,6 +1,7 @@
 ###### 第三方库 ######
 from fastapi import APIRouter, Depends, HTTPException , File , UploadFile , Form 
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 import os
 
 ###### 数据库包 ######
@@ -19,21 +20,20 @@ from aetrix_database.models import  User
 from request_body_schema.user import UserCreate , EmailUpdate
 
 ###### 工具包 ######
-from utils import Utils
+from server_utils import utils , auth , email_verification_service
+
+# 创建路由
+router = APIRouter()
+
 # 其他路由的实例
 from routes.email_routes import email_verification_service
-
-# 常用工具
-utils = Utils()
-
-router = APIRouter()
 
 # 创建用户
 @router.post("/users/crud/create")
 async def create_user(user: UserCreate, db: Session = Depends(utils.get_db)):
     # 测试阶段
     utils.on_test("注册功能")
-    # 日志
+    # 测试日志
     # utils.event_time_log(f"获得验证码：{user.code} 验证码的类型为 {type(user.code)}")
     if email_verification_service.verify_code(user.email, user.code):
         existing_user = db.query(User).filter(User.email == user.email).first()
@@ -103,13 +103,20 @@ async def delete_user(user_id: int, db: Session = Depends(utils.get_db)):
 
 # 更新用户邮件地址
 @router.post("/users/update/email")
-async def update_email(email_update: EmailUpdate, db: Session = Depends(utils.get_db)):
-    # 验证邮箱和验证码
+async def update_email(email_update: EmailUpdate, db: Session = Depends(utils.get_db), token_info: dict = Depends(auth.verify_token)):
+    user_id = token_info.get("user_id")
+    
     if not email_verification_service.verify_code(email_update.email, email_update.code):
         raise HTTPException(status_code=400, detail="验证码错误或已过期")
 
-    updated_user = user_crud.update_user_email(db, email_update.id, email_update.email)
-    if updated_user:
-        return {"message": "邮箱更新成功"}
-    else:
-        raise HTTPException(status_code=404, detail="用户不存在")
+    try:
+        updated_user = user_crud.update_user_email(db, user_id, email_update.email)
+        if updated_user:
+            return {
+                    "status": "success",
+                    "message": "邮箱更新成功"
+                    }
+        else:
+            raise HTTPException(status_code=404, detail="用户不存在")
+    except IntegrityError:
+        raise HTTPException(status_code=400, detail="邮箱已被其他用户使用")

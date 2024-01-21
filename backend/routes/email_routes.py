@@ -1,9 +1,8 @@
 from fastapi import APIRouter, BackgroundTasks, HTTPException
 from pydantic import BaseModel, EmailStr
-from utils.email_verification import EmailVerificationService
+from server_utils.email_verification import EmailVerificationService
 
-from utils import Utils
-utils = Utils()
+from server_utils import utils
 
 router = APIRouter()
 email_verification_service = EmailVerificationService()
@@ -18,7 +17,7 @@ async def send_code(request: EmailRequest, background_tasks: BackgroundTasks):
     
     code = email_verification_service.generate_code()
     # 日志
-    # utils.event_time_log(f"发送验证码给 {request.email} 验证码为 {code} 验证码类型为 {type(code)}")
+    utils.event_time_log(f"发送验证码给 {request.email} 验证码为 {code} 验证码类型为 {type(code)}")
     
     email_verification_service.store_code(request.email, code)
     background_tasks.add_task(email_verification_service.send_email, request.email, code)

@@ -58,7 +58,7 @@ function UserInfor() {
                 });
                 if (response.ok) {
                     const tokenInfo = await response.json();
-                    localStorage.setItem("userID", tokenInfo.id)
+                    localStorage.setItem("userID", tokenInfo.user_id)
                 } else {
                     navigate("../login");
                 }

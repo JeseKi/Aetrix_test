@@ -12,12 +12,7 @@ export default function AetrixNavBar ({src , textColor , isPublic = false}) {
     const localUserID = localStorage.getItem('userID');
 
     // 使用 useState 创建用户信息的各个状态，并初始化为空字符
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const [avatar, setAvatar] = useState('');
-    const [phone, setPhone] = useState('');
-    const [bio, setBio] = useState('');
 
     // 重定向
     const navigate = useNavigate();
@@ -34,12 +29,7 @@ export default function AetrixNavBar ({src , textColor , isPublic = false}) {
     useEffect(() => {
         if (userInfor) {
             console.log(userInfor)
-            setUsername(userInfor.username || '');
-            setEmail(userInfor.email || '');
             // 注意：通常不应从API直接获取密码字段
-            setPassword(userInfor.password || ''); 
-            setPhone(userInfor.phone || '');
-            setBio(userInfor.bio || '');
             setAvatar(userInfor.avatar || '')
         }
     }, [userInfor]);

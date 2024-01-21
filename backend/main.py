@@ -14,15 +14,7 @@ from aetrix_database.models import User
 from request_body_schema.user import UserLogin
 
 ###### 工具包 ######
-from utils import Utils
-from utils.auth import Auth
-from utils.email_verification import EmailVerificationService
-# 常用工具
-utils = Utils()
-# 鉴权工具
-auth = Auth()
-# 验证码收发
-email_verification_service = EmailVerificationService()
+from server_utils import utils , auth
 
 ###### APP ######
 app = FastAPI()
