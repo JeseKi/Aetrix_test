@@ -34,7 +34,7 @@ class VolunteersInitiate(BaseModel):
 
     # 执行方案
     recruiters: str = ''
-    requiredCount: int = 0
+    requiredCount: str = 0
     taskType: str = ''
     educationRequirement: str = ''
     personalIntroduction: str = ''

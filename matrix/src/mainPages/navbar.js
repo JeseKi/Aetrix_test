@@ -44,7 +44,7 @@ export default function AetrixNavBar ({src , textColor , isPublic = false}) {
                 });
                 if (response.ok) {
                     const tokenInfo = await response.json();
-                    localStorage.setItem("userID", tokenInfo.id)
+                    localStorage.setItem("userID", tokenInfo.user_id)
                 } 
             } catch (error) {
                 localStorage.setItem("userID", null)

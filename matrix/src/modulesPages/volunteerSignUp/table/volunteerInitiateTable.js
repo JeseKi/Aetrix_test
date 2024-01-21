@@ -139,6 +139,8 @@ export default function VolunteerInitiateTable () {
     };
     // 提交表单逻辑
     async function submitVolunteerForm() {
+        // token获取
+        const token = localStorage.getItem('token');
         // 创建一个空的 FormData 对象
         const formData = new FormData();
 
@@ -192,6 +194,9 @@ export default function VolunteerInitiateTable () {
         try {
             const response = await fetch('http://127.0.0.1:8000/tables/volunteersignup/initiate/submit', {
                 method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
                 body: formData,
             });
     

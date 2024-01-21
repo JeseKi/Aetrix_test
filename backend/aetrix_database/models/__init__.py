@@ -74,7 +74,7 @@ class VolunteersInitiateModel(UserRelatedModel):
 
     # 执行方案
     recruiters = Column(String, default='')
-    requiredCount = Column(Integer, default=0)
+    requiredCount = Column(String, default=0)
     taskType = Column(String, default='')
     educationRequirement = Column(String, default='')
     personalIntroduction = Column(String, default='')

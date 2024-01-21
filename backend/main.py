@@ -3,6 +3,7 @@ from fastapi import FastAPI, Depends, HTTPException , status
 from fastapi.responses import FileResponse , Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
 ###### 数据库包 ######
@@ -66,7 +67,16 @@ async def login_user(infor: UserLogin, db: Session = Depends(utils.get_db)):
         }
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="邮箱或密码错误")
-    
+
+@app.post("/token")
+async def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(utils.get_db)):
+    user = db.query(User).filter(User.email == form_data.username).first()
+    if not user or user.password != form_data.password:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="邮箱或密码错误")
+
+    token = auth.create_access_token(data={"user_id": user.id})
+    return {"access_token": token, "token_type": "bearer"}
+
 # 根据token获取用户信息    
 @app.get("/verify-token")
 async def verify_user_token(response: Response, token_info: dict = Depends(auth.verify_token)):
