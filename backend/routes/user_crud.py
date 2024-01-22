@@ -17,7 +17,7 @@ volunteer_signup_crud = volunteer_crud.VolunteersSignUpCRUD()
 from aetrix_database.models import  User 
 
 ###### 请求体包 ######
-from request_body_schema.user import UserCreate , EmailUpdate , PasswordUpdate
+from request_body_schema.user import UserCreate , EmailUpdate , PasswordUpdate , ForgotPassword
 
 ###### 工具包 ######
 from server_utils import utils , auth , email_verification_service
@@ -134,3 +134,18 @@ async def update_password(password_update: PasswordUpdate, db: Session = Depends
                 }
     else:
         raise HTTPException(status_code=400, detail="旧密码错误！")
+    
+@router.post("/users/crud/forgotpassword")
+async def forgot_password(form: ForgotPassword, db: Session = Depends(utils.get_db)):
+    if email_verification_service.verify_code(form.email, form.code):
+        user = user_crud.get_user_by_email(db, form.email)
+        if user:
+            user_crud.update_user_password(db, user.id, user.password, form.new_password)
+            return {
+                    "status": "success",
+                    "message": "密码重置成功"
+                    }
+        else:
+            raise HTTPException(status_code=404, detail="用户不存在")
+    else:
+        raise HTTPException(status_code=400, detail="验证码错误或已过期")

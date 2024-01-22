@@ -7,6 +7,7 @@ import Login from "./login/login";
 import SignUp from "./signup/signup";
 import ChangeMail from "./changeInfor/changeMail";
 import ChangePassword from "./changeInfor/changePassword";
+import ForgetPassword from "./changeInfor/forgetPassword";
 import "./user.css"
 import UplaodFile from "../../modulesPages/tables/compoents/upload_file";
 
@@ -18,6 +19,7 @@ export default function User () {
             <Routes>
                 <Route path="changepassword" element={<ChangePassword/>} />
                 <Route path="changemail" element={<ChangeMail />} />
+                <Route path="forgetpassword" element={<ForgetPassword />} />
                 <Route path="infor/:userID" element={<UserInfor />} />
                 <Route path="login" element={<Login />} />
                 <Route path="signup" element={<SignUp />} />

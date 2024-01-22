@@ -67,10 +67,11 @@ export default function Login () {
                     <FloatingLabel className="loginInput" controlId="Password" label="密码">
                         <Form.Control type="password" placeholder="Password" onChange={e => setPassword(e.target.value)} style={{height:"5vh"}}/>
                     </FloatingLabel>
-                    <Button className="loginSubmit" variant="primary" type="button" onClick={userLogin}>
-                        登录
-                    </Button>
                 </Form>
+                <NavLink to="../forgetpassword" className="NavLink" style={{marginLeft:"40%" }}>忘记密码？</NavLink>
+                <Button className="loginSubmit" variant="primary" type="button" onClick={userLogin}>
+                        登录
+                </Button>
             </Container>
         </div>
     )

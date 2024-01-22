@@ -25,3 +25,8 @@ class EmailUpdate(BaseModel):
 class PasswordUpdate(BaseModel):
     old_password: str
     new_password: str
+    
+class ForgotPassword(BaseModel):
+    email: EmailStr
+    code: str
+    new_password : str

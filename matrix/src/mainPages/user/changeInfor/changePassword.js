@@ -1,6 +1,6 @@
 import React , { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Col, Container, Form, Row , InputGroup, Button } from "react-bootstrap";
+import { Col, Container, Form, Row , Button } from "react-bootstrap";
 
 import "./changeMail.css";
 export default function ChangePassword() {
