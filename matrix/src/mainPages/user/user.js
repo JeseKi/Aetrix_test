@@ -51,6 +51,10 @@ function UserInfor() {
 
     // token
     const token = localStorage.getItem('token');
+    // 登出确认框
+    const [signOutShow , setSignOutShow] = useState(false);
+    const handleShow = () => setSignOutShow(true);
+    const handleClose = () => setSignOutShow(false);
 
     const fetchUserData = async () => {
         if (token) {
@@ -64,8 +68,11 @@ function UserInfor() {
                     const tokenInfo = await response.json();
                     localStorage.setItem("userID", tokenInfo.user_id)
                 } else {
-                    localStorage.setItem("userID", false);
-                    localStorage.setItem("token", false)
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("userID");
+                    localStorage.removeItem("email");
+                    localStorage.removeItem("bio");
+                    localStorage.removeItem("username");
                     navigate("../login");
                 }
             } catch (error) {
@@ -142,6 +149,16 @@ function UserInfor() {
             navigate(`../infor/${localUserID}`)
         }
     }, [localUserID , navigate , currentUserID]);
+
+    // 登出
+    function signOut () {
+        localStorage.removeItem("token");
+        localStorage.removeItem("userID");
+        localStorage.removeItem("email");
+        localStorage.removeItem("bio");
+        localStorage.removeItem("username");
+        navigate("../login");
+    }
     // 渲染用户信息表单
     return (
         <Container className="userInforContainer">
@@ -186,14 +203,39 @@ function UserInfor() {
                     </Form>
                 </Modal.Body>
                 <Row>
+                    <Col xs={3}>
+                        <Button className="formMargin" variant="danger" onClick={handleShow}>
+                            登出
+                        </Button>
+                    </Col>
                     <Col className="formMargin">
                         <Button variant="danger" onClick={() => navigate('../changepassword')}>
                             更改密码
                         </Button>
+                        <Modal
+                            show={signOutShow}
+                            onHide={handleClose}
+                            backdrop="static"
+                            keyboard={false}
+                            centered
+                        >
+                            <Modal.Header closeButton>
+                            <Modal.Title>确认登出吗？</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                            <p>确认登出后，您将需要再次输入账密才能登录账号，确认要退出吗？</p>
+                            </Modal.Body>
+                            <Modal.Footer>
+                            <Button variant="secondary" onClick={handleClose}>
+                                否
+                            </Button>
+                            <Button variant="danger" onClick={signOut}>是</Button>
+                            </Modal.Footer>
+                        </Modal>
                     </Col>
                 </Row>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => navigate(-2)}>
+                    <Button variant="secondary" onClick={() => navigate("/")}>
                         关闭
                     </Button>
                     <Button variant="primary" className="buttonMargin" onClick={updateInfor}>

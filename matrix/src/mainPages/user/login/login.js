@@ -16,7 +16,7 @@ export default function Login () {
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (userID !== "false" && token !== "false" ) {
+        if (userID && token) {
             // 如果已登录，重定向到信息页面
             console.log("userID:",userID, "token:", token);
             navigate(`../infor/${userID}`);
