@@ -20,9 +20,9 @@ export default function User () {
                 <Route path="changepassword" element={<ChangePassword/>} />
                 <Route path="changemail" element={<ChangeMail />} />
                 <Route path="forgetpassword" element={<ForgetPassword />} />
-                <Route path="infor/:userID" element={<UserInfor />} />
                 <Route path="login" element={<Login />} />
                 <Route path="signup" element={<SignUp />} />
+                <Route path="infor/:userID" element={<UserInfor />} />
             </Routes>
         </div>
     )
@@ -76,8 +76,8 @@ function UserInfor() {
 
     // 使用 useEffect 发送 HTTP 请求，获取用户信息
     useEffect(() => {
-        if (!token | !localUserID) {
-            navigate('../login');
+        if (!token && !localUserID) {
+            console.log("回到登陆界面")
         }
         else {
             fetchUserData();

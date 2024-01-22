@@ -16,7 +16,7 @@ export default function Login () {
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (!userID && !token ) {
+        if (userID !== "false" && token !== "false" ) {
             // 如果已登录，重定向到信息页面
             console.log("userID:",userID, "token:", token);
             navigate(`../infor/${userID}`);
@@ -43,6 +43,7 @@ export default function Login () {
                 // 保存Token到localStorage
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('userID', data.user_id);
+                console.log("跳转到用户信息界面")
                 // console.log("token:", data.token)
         
                 // 导航到用户信息页面
