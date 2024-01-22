@@ -158,6 +158,7 @@ function UserInfor() {
         localStorage.removeItem("bio");
         localStorage.removeItem("username");
         navigate("../login");
+        window.location.reload();
     }
     // 渲染用户信息表单
     return (
@@ -229,7 +230,9 @@ function UserInfor() {
                             <Button variant="secondary" onClick={handleClose}>
                                 否
                             </Button>
-                            <Button variant="danger" onClick={signOut}>是</Button>
+                            <Button variant="danger" onClick={signOut} type="submit">
+                                是
+                            </Button>
                             </Modal.Footer>
                         </Modal>
                     </Col>

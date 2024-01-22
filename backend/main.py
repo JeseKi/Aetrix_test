@@ -53,7 +53,7 @@ async def login_user(infor: UserLogin, db: Session = Depends(utils.get_db)):
 
     # 检查用户是否存在
     if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="用户不存在")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="用户不存在!")
 
     # 验证密码
     if user.password == infor.password:
@@ -66,7 +66,7 @@ async def login_user(infor: UserLogin, db: Session = Depends(utils.get_db)):
             "token" : token
         }
     else:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="邮箱或密码错误")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="密码错误!")
 
 @app.post("/token")
 async def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(utils.get_db)):

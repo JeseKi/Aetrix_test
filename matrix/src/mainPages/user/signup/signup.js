@@ -78,15 +78,22 @@ export default function SignUp () {
             },
             body: JSON.stringify(userData)
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw { status: response.status, body: response.json() };  // 抛出包含状态码和响应体的错误
+            }
+            return response.json();
+        })
         .then(data => {
             console.log('Success:', data);
             if (data.id) {
-                navigate(`../infor/${data.id}`);
+                navigate(`../login`);
             }
         })
-        .catch((error) => {
+        .catch(async (error) => {
             console.error('Error:', error);
+            const errorBody = await error.body;  // 异步获取错误的具体信息
+            alert(errorBody.detail)
         });
     }    
 

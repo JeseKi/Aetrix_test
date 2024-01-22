@@ -63,23 +63,31 @@ export default function ForgetPassword() {
             },
             body: JSON.stringify({email: email, code: code ,new_password: newPassword })
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw { status: response.status, body: response.json() }; // 抛出一个包含状态码的错误
+            }
+            return response.json();
+        })
         .then(data => {
             if (data.status === "success"){
-            console.log('Password changed:', data);
-            alert("密码已更改。");
-            navigate(-1);
+                console.log('Password changed:', data);
+                alert("密码已更改。");
+                navigate(-1);
             }
-         })
-        .catch((error) => {
+        })
+        .catch(async (error) => {
             console.error('Error:', error);
-            if (error.response.status === 400) {
+            const errorBody = await error.body; // 异步获取错误的具体信息
+            if (error.status === 400) {
                 alert("验证码错误，请重新输入！");
-            }
-            if (error.response.status === 404) {
+            } else if (error.status === 404) {
                 alert("用户不存在，请检查邮箱是否正确！");
+            } else {
+                // 处理其他类型的错误
+                alert("发生错误：" + (errorBody.detail || "未知错误"));
             }
-         });
+        });        
     };
 
     return (

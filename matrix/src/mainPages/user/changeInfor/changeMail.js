@@ -66,7 +66,12 @@ export default function ChangeMail() {
             },
             body: JSON.stringify({ email: newEmail, code: code.toString() })
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw { status: response.status, body: response.json() }
+            }
+            return response.json()
+        })
         .then(data => {
             if (data.status === "success"){
             console.log('Email changed:', data);
@@ -78,10 +83,10 @@ export default function ChangeMail() {
             alert("验证码错误或已过期，请重新获取验证码。");
             }
          })
-        .catch((error) => {
-            console.error('Error:', error);
-            alert("验证码错误或已过期，请重新获取验证码。");
-         });
+        .catch(async (error) => {
+            const errorBody = await error.body;
+            alert(errorBody.detail)
+        });
     };
 
     return (

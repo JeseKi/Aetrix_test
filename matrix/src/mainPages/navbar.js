@@ -69,7 +69,7 @@ export default function AetrixNavBar ({src , textColor , isPublic = false}) {
             .then(data => setUserInfor(data))
             .catch(error => console.error('Error', error));
         }
-    }, [localUserID]);
+    }, [localUserID , token]);
 
     function changeDisplay () {
         if (avatar) {

@@ -1,9 +1,9 @@
-from pydantic import BaseModel , EmailStr
+from pydantic import BaseModel
 from typing import Optional
 
 class UserCreate(BaseModel):
     username: str
-    email: EmailStr
+    email: str
     code: Optional[str] = None
     password: Optional[str] = None
     avatar: Optional[str] = None
@@ -12,14 +12,14 @@ class UserCreate(BaseModel):
     bio: Optional[str] = None
     
 class UserLogin(BaseModel):
-    email: EmailStr
+    email: str
     password: str
     
 class EmailRequest(BaseModel):
-    email: EmailStr
+    email: str
 
 class EmailUpdate(BaseModel):
-    email: EmailStr
+    email: str
     code: str
     
 class PasswordUpdate(BaseModel):
@@ -27,6 +27,6 @@ class PasswordUpdate(BaseModel):
     new_password: str
     
 class ForgotPassword(BaseModel):
-    email: EmailStr
+    email: str
     code: str
     new_password : str

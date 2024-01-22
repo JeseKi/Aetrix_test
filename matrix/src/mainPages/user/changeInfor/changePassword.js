@@ -34,7 +34,12 @@ export default function ChangePassword() {
             },
             body: JSON.stringify({old_password: oldPassword, new_password: newPassword })
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw {body: response.json()}
+            }
+            return response.json()
+        })
         .then(data => {
             if (data.status === "success"){
             console.log('Password changed:', data);
@@ -42,10 +47,10 @@ export default function ChangePassword() {
             navigate(-1);
             }
          })
-        .catch((error) => {
-            console.error('Error:', error);
-            alert("密码更改失败");
-         });
+        .catch(async (error) => {
+            const errorBody = await error.body;
+            alert(errorBody.detail);
+        });
     };
 
     return (
