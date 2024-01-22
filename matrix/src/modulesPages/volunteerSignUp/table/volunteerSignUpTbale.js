@@ -96,7 +96,7 @@ export default function VolunteerSignUpTable() {
             console.log(`${key}: ${value}`);
             }
         try {
-            const response = await fetch('http://127.0.0.1:8000/tables/volunteersignup/signup/submit', {
+            const response = await fetch('/tables/volunteersignup/signup/submit', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 },

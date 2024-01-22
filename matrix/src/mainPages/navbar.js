@@ -37,7 +37,7 @@ export default function AetrixNavBar ({src , textColor , isPublic = false}) {
     const fetchUserData = async () => {
         if (token) {
             try {
-                const response = await fetch('http://127.0.0.1:8000/verify-token', {
+                const response = await fetch('/verify-token', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -64,7 +64,7 @@ export default function AetrixNavBar ({src , textColor , isPublic = false}) {
     // 获取用户信息
     useEffect(() => {
         if (localUserID) {
-            fetch(`http://127.0.0.1:8000/users/crud/${localUserID}`)
+            fetch(`/users/crud/${localUserID}`)
             .then(response => response.json())
             .then(data => setUserInfor(data))
             .catch(error => console.error('Error', error));
@@ -74,7 +74,7 @@ export default function AetrixNavBar ({src , textColor , isPublic = false}) {
     function changeDisplay () {
         if (avatar) {
             return (
-                <img className="avatar" alt="头像" style={{width:"3vw",height:"3vw"}} src={"http://127.0.0.1:8000"+avatar} />)
+                <img className="avatar" alt="头像" style={{width:"3vw",height:"3vw"}} src={""+avatar} />)
         }
         else {
             return "登录"

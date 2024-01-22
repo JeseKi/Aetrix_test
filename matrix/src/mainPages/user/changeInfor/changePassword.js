@@ -26,7 +26,7 @@ export default function ChangePassword() {
             return;
         }
 
-        fetch('http://127.0.0.1:8000/users/update/password', {
+        fetch('/users/update/password', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

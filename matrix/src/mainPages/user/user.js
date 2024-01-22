@@ -59,7 +59,7 @@ function UserInfor() {
     const fetchUserData = async () => {
         if (token) {
             try {
-                const response = await fetch('http://127.0.0.1:8000/verify-token', {
+                const response = await fetch('/verify-token', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -120,7 +120,7 @@ function UserInfor() {
         }
     
         // 发送PUT请求到后端
-        fetch(`http://127.0.0.1:8000/users/crud/${localUserID}`, {
+        fetch(`/users/crud/${localUserID}`, {
             method: 'PUT',
             body: formData
         })
@@ -140,7 +140,7 @@ function UserInfor() {
     // 获取用户信息，并在用户ID不正确时重定向到正确的页面
     useEffect(() => {
         if (localUserID) {
-            fetch(`http://127.0.0.1:8000/users/crud/${localUserID}`)
+            fetch(`/users/crud/${localUserID}`)
             .then(response => response.json())
             .then(data => setUserInfor(data))
             .catch(error => console.error('Error', error));
@@ -163,7 +163,7 @@ function UserInfor() {
     // 渲染用户信息表单
     return (
         <Container className="userInforContainer">
-            <img src={"http://127.0.0.1:8000"+avatar} alt="头像" className="avatar"/>
+            <img src={""+avatar} alt="头像" className="avatar"/>
             <Form.Control type="text" value={username} className="name" onChange={e => setUsername(e.target.value)}/>
             <Modal.Dialog>
                 <Modal.Body>

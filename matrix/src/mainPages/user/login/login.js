@@ -28,7 +28,15 @@ export default function Login () {
         password: password
     }
     function userLogin() {
-        fetch('http://127.0.0.1:8000/users/login/email', {
+        if (email === "") {
+            alert("请输入邮箱地址！")
+            return;
+        }
+        if (password === "") {
+            alert("请输入密码！")
+            return;
+        }
+        fetch('/users/login/email', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

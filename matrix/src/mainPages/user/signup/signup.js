@@ -21,7 +21,7 @@ export default function SignUp () {
     
         // 开始发送验证码
         setSending(true);
-        fetch('http://127.0.0.1:8000/send-code/', {
+        fetch('/send-code/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -60,7 +60,14 @@ export default function SignUp () {
             phone: null,
             bio: null
         };
-    
+        const form = [
+            {value : "请输入邮件地址！" , name : "email"},
+            {}
+        ]
+        if (!email) {
+            alert("请输入邮件地址！")
+            return;
+        }
         if (password !== confirmPassword) {
             alert("两次输入的密码不一致，请重新输入！");
             return;
@@ -71,7 +78,7 @@ export default function SignUp () {
         }
     
         // 发送POST请求到后端
-        fetch('http://127.0.0.1:8000/users/crud/create', {
+        fetch('/users/crud/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

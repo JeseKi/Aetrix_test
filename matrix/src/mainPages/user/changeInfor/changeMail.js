@@ -20,7 +20,7 @@ export default function ChangeMail() {
     
         // 开始发送验证码
         setSending(true);
-        fetch('http://127.0.0.1:8000/send-code/', {
+        fetch('/send-code/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -58,7 +58,7 @@ export default function ChangeMail() {
             alert("请输入新电子邮箱地址");
             return;
         }
-        fetch('http://127.0.0.1:8000/users/update/email', {
+        fetch('/users/update/email', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -18,7 +18,7 @@ export default function ForgetPassword() {
     
         // 开始发送验证码
         setSending(true);
-        fetch('http://127.0.0.1:8000/send-code/', {
+        fetch('/send-code/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -56,7 +56,7 @@ export default function ForgetPassword() {
             return;
         }
 
-        fetch('http://127.0.0.1:8000/users/crud/forgotpassword', {
+        fetch('/users/crud/forgotpassword', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
