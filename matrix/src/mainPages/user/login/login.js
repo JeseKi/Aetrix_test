@@ -16,12 +16,12 @@ export default function Login () {
     const navigate = useNavigate()
 
     useEffect(() => {
-
-        if (userID && token) {
+        if (!userID && !token ) {
             // 如果已登录，重定向到信息页面
+            console.log("userID:",userID, "token:", token);
             navigate(`../infor/${userID}`);
         }
-    }, [navigate]); // 添加navigate作为依赖
+    }, [navigate , userID , token]); // 添加navigate作为依赖
 
     const userData = {
         email: email,

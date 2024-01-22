@@ -62,6 +62,8 @@ function UserInfor() {
                     const tokenInfo = await response.json();
                     localStorage.setItem("userID", tokenInfo.user_id)
                 } else {
+                    localStorage.setItem("userID", false);
+                    localStorage.setItem("token", false)
                     navigate("../login");
                 }
             } catch (error) {
@@ -72,7 +74,7 @@ function UserInfor() {
 
     // 使用 useEffect 发送 HTTP 请求，获取用户信息
     useEffect(() => {
-        if (!token) {
+        if (!token | !localUserID) {
             navigate('../login');
         }
         else {
