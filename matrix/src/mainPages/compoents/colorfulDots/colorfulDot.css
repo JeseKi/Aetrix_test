@@ -1,0 +1,14 @@
+.infinity-path {
+    position: relaative;
+    width: 300px;
+    height: 300px;
+    border: 1px solid #ccc; /* 仅用于可视化布局 */
+}
+
+.dot {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+}

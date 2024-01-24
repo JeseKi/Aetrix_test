@@ -7,7 +7,7 @@ import "./aboutPage.css"
 export default function About () {
     return(
         <div className="aboutPage">
-            <AetrixNavBar src={"/imgs/mainPageImgs/LogoWithText_black.svg"} textColor={"black"}/>
+            <AetrixNavBar src={"/imgs/mainPageImgs/LogoWithText_black.svg"} textColor={"black"} isPublic={true}/>
             <div className="aboutContentContainer">
                 <Container className="container">
                     <span className="title">关于ÆTRIX</span>

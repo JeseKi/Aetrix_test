@@ -7,11 +7,11 @@ import User from './mainPages/user/user';
 import Modules from './modulesPages/modules';
 import Tables from './modulesPages/tables/tables';
 
-// import TestUI from './uiText';
 import './App.css';
 
 function App() {
   return (
+    <div>
       <Router className="body">
         <Routes>
           <Route path='/' element={<MainPage />} />
@@ -21,6 +21,7 @@ function App() {
           <Route path='/tables/*' element={<Tables/>} /> 
         </Routes>
       </Router>
+    </div>
   );
 }
 

@@ -1,0 +1,45 @@
+.targetTitle {
+    font-size: 10em;
+    text-align: center;
+    transition: color 2s, text-shadow 2s; /* 添加过渡效果 */
+    z-index: 9999;
+}
+
+.p {
+    font-size: 4.5vh;
+    margin-top: 8vh;
+    text-align: center;
+    transition: color 2s, text-shadow 2s; /* 添加过渡效果 */
+    z-index: 9999;
+}
+
+/* 当屏幕宽度小于或等于768px时 */
+@media (max-width: 768px) {
+    .targetTitle {
+        font-size: 3vw;
+    }
+    .p {
+        font-size: 3vh;
+        margin-top: -5vh;
+    }
+  }
+
+.cursor {
+    display: inline-block;
+    width: 0.1em;
+    height: 3vw;  /* 与文本高度相同 */
+    background-color: #f7f3ec;
+    animation: blink 1s steps(1) infinite;
+    vertical-align: bottom;
+    margin-bottom: 0vh;  /* 或者使用 margin-top 进行微调 */
+}
+
+@keyframes blink {
+    50% {
+        background-color: transparent;
+    }
+}
+
+.t-index {
+    z-index: 9999;
+}
